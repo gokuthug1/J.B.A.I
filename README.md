@@ -14,7 +14,7 @@ Go try it out lol, it's so bad: 🔽
 You can delete messages by clicking **Shift + Click** (Mouse Click). On mobile, simply **tap and hold** a message, and a confirmation prompt will appear.
 
 ### 🔹 Settings
-I've recently added some settings to enhance the experience:
+I've recently added some settings to give it a chatbot UI look (I need improvement lol):
 
 #### 1. 🗣️ TTS (Text-to-Speech)
 - The TTS feature can be toggled **on/off** in the settings.
