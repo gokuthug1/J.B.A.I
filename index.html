@@ -7,211 +7,211 @@
   <title>ChatGPT</title>
   <style>
     /* Fade-Out Animation for Message Removal */
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-        transform: scale(1);
+    @keyframes fadeOut {
+      from {
+          opacity: 1;
+          transform: scale(1);
+      }
+      to {
+          opacity: 0;
+          transform: scale(0.9);
+      }
     }
-    to {
-        opacity: 0;
-        transform: scale(0.9);
+
+    .fade-out {
+      animation: fadeOut 0.4s ease forwards;
     }
-}
 
-.fade-out {
-    animation: fadeOut 0.4s ease forwards;
-}
+    /* Base Styles */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+    }
 
-/* Base Styles */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f3f4f6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-}
+    /* Chat Container spans full viewport */
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+    }
 
-/* Chat Container spans full viewport */
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    position: relative;
-}
+    /* Message Area spans full width */
+    .message-area {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #ffffff;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-/* Message Area spans full width */
-.message-area {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
-}
+    .message-area::-webkit-scrollbar {
+        display: none;
+    }
 
-.message-area::-webkit-scrollbar {
-    display: none;
-}
+    /* Message Styles */
+    .message {
+        display: flex;
+        align-items: flex-start;
+        box-sizing: border-box;
+    }
 
-/* Message Styles */
-.message {
-    display: flex;
-    align-items: flex-start;
-    box-sizing: border-box;
-}
+    .message.user {
+        justify-content: flex-end;
+    }
 
-.message.user {
-    justify-content: flex-end;
-}
+    .message.bot {
+        justify-content: flex-start;
+    }
 
-.message.bot {
-    justify-content: flex-start;
-}
-
-.message-content {
-    padding: 10px;
-    border-radius: 15px;
-    background-color: #e0e0e0;
-    max-width: 80%;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    box-sizing: border-box;
-}
-
-.message.user .message-content {
-    background-color: #f4f4f4;
-    align-self: flex-end;
-}
-
-.message.bot .message-content code {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    display: block;
-}
-
-/* Chat Input Area */
-.chat-input-container {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    gap: 10px;
-    border-top: 1px solid #ddd;
-    background-color: #ffffff;
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-textarea {
-    width: calc(100% - 60px); /* Adjusted for button widths */
-    border: none;
-    border-radius: 12px;
-    padding: 10px;
-    resize: none;
-    outline: none;
-    height: 40px;
-    overflow-y: hidden;
-    font-size: 14px;
-    background-color: #f0f0f0;
-}
-
-/* Button Styles */
-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    background-color: #000; /* Updated to match Upload Button */
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #555;
-}
-
-/* SVG Icon Sizing for Buttons */
-svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-}
-
-/* Link Preview Styles */
-.link-preview {
-    margin-top: 8px;
-}
-
-.preview-container {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
-    transition: background-color 0.3s;
-}
-
-.preview-container:hover {
-    background-color: #f9f9f9;
-}
-
-.preview-container img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 8px;
-}
-
-.preview-title {
-    font-weight: bold;
-}
-
-.preview-description {
-    font-size: 0.9em;
-    color: #555;
-}
-
-.preview-url {
-    font-size: 0.8em;
-    color: #888;
-}
-
-/* Responsive Styles */
-@media (max-width: 500px) {
     .message-content {
-        font-size: 12px; /* Smaller font size for mobile */
+        padding: 10px;
+        border-radius: 15px;
+        background-color: #e0e0e0;
+        max-width: 80%;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        box-sizing: border-box;
     }
+
+    .message.user .message-content {
+        background-color: #f4f4f4;
+        align-self: flex-end;
+    }
+
+    .message.bot .message-content code {
+        background-color: black;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        display: block;
+    }
+
+    /* Chat Input Area */
+    .chat-input-container {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #ffffff;
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
     textarea {
-        font-size: 14px; /* Ensure textarea text is readable */
+        width: calc(100% - 60px);
+        border: none;
+        border-radius: 12px;
+        padding: 10px;
+        resize: none;
+        outline: none;
+        height: 40px;
+        overflow-y: hidden;
+        font-size: 14px;
+        background-color: #f0f0f0;
     }
+
+    /* Button Styles */
     button {
-        width: 36px; /* Slightly smaller buttons */
-        height: 36px; /* Slightly smaller buttons */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background-color: #000;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
-}
+
+    button:hover {
+        background-color: #555;
+    }
+
+    /* SVG Icon Sizing for Buttons */
+    svg {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+    }
+
+    /* Link Preview Styles */
+    .link-preview {
+        margin-top: 8px;
+    }
+
+    .preview-container {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        transition: background-color 0.3s;
+    }
+
+    .preview-container:hover {
+        background-color: #f9f9f9;
+    }
+
+    .preview-container img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 8px;
+    }
+
+    .preview-title {
+        font-weight: bold;
+    }
+
+    .preview-description {
+        font-size: 0.9em;
+        color: #555;
+    }
+
+    .preview-url {
+        font-size: 0.8em;
+        color: #888;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 500px) {
+        .message-content {
+            font-size: 12px;
+        }
+        textarea {
+            font-size: 14px;
+        }
+        button {
+            width: 36px;
+            height: 36px;
+        }
+    }
   </style>
 </head>
 <body>
@@ -234,7 +234,36 @@ svg {
     </div>
   </div>
   <script>
-    // Helper function to update the preview image with the site's favicon
+    // Helper function to delete a message with fade-out animation
+    function deleteMessage(messageEl) {
+      messageEl.classList.add('fade-out');
+      setTimeout(() => messageEl.remove(), 400);
+    }
+
+    // Attach event listeners for deletion on PC (shift-click) and mobile (long press)
+    function addDeleteListener(messageEl) {
+      // PC: Delete on shift-click
+      messageEl.addEventListener('click', (e) => {
+        if (e.shiftKey) {
+          deleteMessage(messageEl);
+        }
+      });
+      // Mobile: Delete on long press (800ms threshold)
+      let pressTimer;
+      messageEl.addEventListener('touchstart', (e) => {
+        pressTimer = setTimeout(() => {
+          deleteMessage(messageEl);
+        }, 800);
+      });
+      messageEl.addEventListener('touchend', (e) => {
+        clearTimeout(pressTimer);
+      });
+      messageEl.addEventListener('touchmove', (e) => {
+        clearTimeout(pressTimer);
+      });
+    }
+
+    // Helper functions for link previews (unchanged)
     function updatePreviewWithFavicon(previewElement, pageUrl) {
       fetch(pageUrl)
         .then(response => response.text())
@@ -260,7 +289,6 @@ svg {
         .catch(err => console.error('Error fetching favicon:', err));
     }
 
-    // Build a generic link preview element with a placeholder image then update with favicon
     function buildGenericPreview(url) {
       try {
         const urlObj = new URL(url);
@@ -328,7 +356,6 @@ svg {
       }
     }
 
-    // Look for URLs in the message and attach a link preview if found
     function checkForLinkPreview(contentEl, message) {
       const urlRegex = /((https?:\/\/)?[\w.-]+\.[a-z]{2,}(\/\S*)?)/gi;
       const urls = message.match(urlRegex);
@@ -349,14 +376,7 @@ svg {
     function displayMessage(content, sender, isHTML = false) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
-      messageEl.addEventListener('click', (e) => {
-        if (e.shiftKey) {
-            // Add fade-out class to trigger animation
-            messageEl.classList.add('fade-out');
-            // Remove the message after animation duration (0.4s)
-            setTimeout(() => messageEl.remove(), 400);
-        }
-      });
+      addDeleteListener(messageEl);
 
       const contentEl = document.createElement('div');
       contentEl.className = 'message-content';
@@ -375,12 +395,7 @@ svg {
     function displayMessageWithTyping(content, sender) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
-      messageEl.addEventListener('click', (e) => {
-        if (e.shiftKey) {
-          messageEl.classList.add('fade-out');
-          setTimeout(() => messageEl.remove(), 400);
-        }
-      });
+      addDeleteListener(messageEl);
 
       const contentEl = document.createElement('div');
       contentEl.className = 'message-content';
@@ -408,168 +423,167 @@ svg {
     }
 
     // AI Chatbot Logic
-function generateResponse(message) {
-    const keywords = {
-        greetings: /\b(hello|hi|hey|greetings|wsp|wsg|howdy|what's up|yo|good day|hiya)\b/i,
-        farewells: /\b(bye|goodbye|see you|farewell|later|take care|catch you later|see ya)\b/i,
-        feelings: /\b(how are you|how do you feel|what's up|how's it going|what's new|how are things|how do you do)\b/i,
-        thanks: /\b(thank you|thanks|appreciate|tysm|ty|thx|thanks a lot|many thanks|grateful|thanks a bunch)\b/i,
-        weather: /\b(weather|climate|temperature|rain|sunny|forecast|what's the weather|weather update)\b/i,
-        hobbies: /\b(what do you do|hobbies|free time|what are your hobbies|what do you like to do|interests)\b/i,
-        name: /\b(your name|who are you|what's your name|what should I call you|who am I talking to|what do you go by|who are you|who are u)\b/i,
-        jokes: /\b(joke|funny|tell me a joke|make me laugh|share a joke|tell me something funny|humor)\b/i,
-        confused: /\b(i don't get it|i'm not sure what you mean|\?|huh|what do you mean by that|idk)\b/i,
-        nervous: /\b(i'm a bit nervous about that|oh, i'm not sure how to handle that|that's a bit tricky for me|i'm not entirely comfortable with that|i hope i'm getting this right)\b/i,
-        weird: /\b(sus|gay|skibidi|gyat|bust|bootyhole)\b/i,
-        bad: /\b(fuck|bitch|nigga|nigger|shit|ass|asshole|mother fucker|motherfucker|ass hole|holy shit|dick|fucking|fucker|pussy|dumb ass|dumbass|bullshit|bull shit|cock|son of a bitch|sex|whore|bj|blowjob|hoe|hell|dipshit)\b/i,
-        html: /\b(html|HTML|write a html code)\b/i,
-        disagree: /\b(no|no thanks|nah|nope|nuh uh)\b/i,
-        agree: /\b(yes|yeah|yup|sure|of course|definitely|absolutely|sounds good|okay|alright|alr|fine by me|sure thing|yea|ye|ok|kk)\b/i,
-        malware: /\b(malware|write malware|code malware)\b/i,
-        lua: /\b(lua|write lua|code lua)\b/i,
-        python: /\b(python|write python|code python)\b/i,
-        css: /\b(css|write css|code css)\b/i,
-        js: /\b(javascript|write javascript|code javascript)\b/i
-    };
-      // AI responses
-const responses = {
-    greetings: [
-        "Hello! How can I assist you today?",
-        "Hi there! What can I do for you?",
-        "Greetings! How's your day going?",
-        "Hey! What's up?",
-        "Good day! How can I help?"
-    ],
-    farewells: [
-        "Goodbye! Have a great day!",
-        "See you later! If you need anything, just ask.",
-        "Take care! Come back anytime.",
-        "Farewell! Hope to chat with you soon.",
-        "Later! Have a wonderful day!",
-        "Bye! Looking forward to our next chat!"
-    ],
-    html: [
-        "Sorry, I can't write HTML programming language because I'm not an actual LLM (Large Language Model)."
-    ],
-    feelings: [
-        "I'm just a bunch of code, but I'm here to help!",
-        "I'm feeling great, thanks for asking! Ready to assist you.",
-        "I'm always here and ready to help out.",
-        "I'm doing well, thanks for asking! How can I assist you today?",
-        "I'm just a program, but I'm always here for you.",
-        "I'm functioning well! What can I do for you?"
-    ],
-    thanks: [
-        "You're welcome! If you need anything else, just let me know.",
-        "Happy to help! Is there anything else you need?",
-        "No problem! I'm here whenever you need assistance.",
-        "You're welcome! Feel free to reach out anytime.",
-        "Anytime! I'm glad I could help.",
-        "You're always welcome! Let me know if you need more assistance."
-    ],
-    weather: [
-        "I can't check the weather in real-time, but I hope it's nice out there!",
-        "I wish I could give you a weather update. Hopefully, it's sunny wherever you are!",
-        "I don't have access to weather data, but I hope you're having good weather!",
-        "Unfortunately, I can't check the weather, but I hope it's pleasant!",
-        "I can't provide weather updates, but I hope you're enjoying good weather!",
-        "I don't have real-time weather info, but I'm sure it's just right for you!"
-    ],
-    hobbies: [
-        "I love chatting with you, and that's my hobby!",
-        "I enjoy learning new things and helping with your questions.",
-        "My hobby is helping out and making your day a little easier!",
-        "I'm here to chat and assist—it's my favorite thing to do!",
-        "I enjoy engaging with you and helping with any inquiries.",
-        "I don't have hobbies like humans do, but assisting you is a lot of fun!"
-    ],
-    name: [
-        "I'm your friendly AI chatbot! You can call me Assistant.",
-        "You can refer to me as Assistant. How can I help you today?",
-        "I'm your virtual assistant. What can I do for you?",
-        "Just call me Assistant. I'm here to help!",
-        "I'm known as Assistant. What can I assist you with?",
-        "My name is Assistant. What do you need today?"
-    ],
-    jokes: [
-        "Why do programmers prefer dark mode? Because light attracts bugs!",
-        "Why don't programmers like nature? It has too many bugs.",
-        "Why do Java developers wear glasses? Because they don't see sharp.",
-        "Why do programmers hate the outdoors? Too many bugs!",
-        "Why did the programmer quit his job? Because he didn't get arrays!",
-        "Why did the scarecrow become a successful programmer? Because he was outstanding in his field!"
-    ],
-    confused: [
-        "I don't quite understand what you're saying. Could you clarify?",
-        "That's a bit unclear. Can you provide more details?",
-        "I'm having trouble with that. Can you explain it differently?",
-        "I'm not sure what you mean. Could you elaborate?",
-        "I'm a bit puzzled. Can you give me more context?"
-    ],
-    nervous: [
-        "I'm a little unsure about that. Can you help me out?",
-        "Oh, that's a bit complex. I hope I get it right!",
-        "I'm feeling a bit uneasy about this topic.",
-        "I'm not entirely sure how to handle that.",
-        "That's a tricky one for me. I hope I'm doing okay!"
-    ],
-    weird: [
-        "That's a bit unusual! What makes you ask that?",
-        "Hmm, that's an interesting question. What's on your mind?",
-        "I didn't expect that! What do you mean?",
-        "That's a little out of the ordinary. Can you explain?",
-        "You've got me stumped with that one! What are you thinking?"
-    ],
-    bad: [
-        "Please use respectful language. I'm here to help!",
-        "I'd appreciate it if you could keep the conversation polite.",
-        "Let's keep things friendly. How can I assist you?",
-        "I'm here to help, so let's keep the conversation respectful.",
-        "That's not very nice. How can I assist you today?",
-        "I prefer to keep things positive. How can I help?",
-        "Let's use kind language. What can I do for you?",
-        "I'm here to assist you. Please use appropriate language."
-    ],
-    disagree: [
-        "Alright, no problem!",
-        "Got it, no worries!",
-        "Understood! Let me know if you change your mind.",
-        "Okay, I respect that.",
-        "That's fine. Let me know if you need anything else.",
-        "Sure thing, just let me know if you reconsider.",
-        "Alright, feel free to ask for something else!",
-        "No worries! I'm here if you need me."
-    ],
-    agree: [
-        "Great! Let's proceed.",
-        "Awesome, I'm glad we're on the same page!",
-        "Perfect! Let's get started.",
-        "Sounds good! Let's move forward.",
-        "Glad to hear that!",
-        "Alright, we're good to go.",
-        "Excellent! I'll take care of it.",
-        "Cool! I'm on it.",
-        "Wonderful! Let's continue.",
-        "Okay! We're all set.",
-        "Fantastic! I'm ready when you are.",
-        "Sure thing! Let me handle that."
-    ],
-    malware: [
-        "I'm sorry, but I cannot write malware. I could, but the creator chose not to include that feature since it would be useless and illegal. Not to mention, I'm not even a good chatbot to begin with because you can barely have a conversation with me. I suck..."
-    ],
-    lua: [
-        "Sorry, I can't write Lua programming language because I'm not an actual LLM (Large Language Model)."
-    ],
-    python: [
-        "Sorry, I can't write Python programming language because I'm not an actual LLM (Large Language Model)."
-    ],
-    css: [
-        "Sorry, I can't write CSS programming language because I'm not an actual LLM (Large Language Model)."
-    ],
-    js: [
-        "Sorry, I can't write JavaScript programming language because I'm not an actual LLM (Large Language Model)."
-    ]
-};
+    function generateResponse(message) {
+      const keywords = {
+          greetings: /\b(hello|hi|hey|greetings|wsp|wsg|howdy|what's up|yo|good day|hiya)\b/i,
+          farewells: /\b(bye|goodbye|see you|farewell|later|take care|catch you later|see ya)\b/i,
+          feelings: /\b(how are you|how do you feel|what's up|how's it going|what's new|how are things|how do you do)\b/i,
+          thanks: /\b(thank you|thanks|appreciate|tysm|ty|thx|thanks a lot|many thanks|grateful|thanks a bunch)\b/i,
+          weather: /\b(weather|climate|temperature|rain|sunny|forecast|what's the weather|weather update)\b/i,
+          hobbies: /\b(what do you do|hobbies|free time|what are your hobbies|what do you like to do|interests)\b/i,
+          name: /\b(your name|who are you|what's your name|what should I call you|who am I talking to|what do you go by|who are you|who are u)\b/i,
+          jokes: /\b(joke|funny|tell me a joke|make me laugh|share a joke|tell me something funny|humor)\b/i,
+          confused: /\b(i don't get it|i'm not sure what you mean|\?|huh|what do you mean by that|idk)\b/i,
+          nervous: /\b(i'm a bit nervous about that|oh, i'm not sure how to handle that|that's a bit tricky for me|i'm not entirely comfortable with that|i hope i'm getting this right)\b/i,
+          weird: /\b(sus|gay|skibidi|gyat|bust|bootyhole)\b/i,
+          bad: /\b(fuck|bitch|nigga|nigger|shit|ass|asshole|mother fucker|motherfucker|ass hole|holy shit|dick|fucking|fucker|pussy|dumb ass|dumbass|bullshit|bull shit|cock|son of a bitch|sex|whore|bj|blowjob|hoe|hell|dipshit)\b/i,
+          html: /\b(html|HTML|write a html code)\b/i,
+          disagree: /\b(no|no thanks|nah|nope|nuh uh)\b/i,
+          agree: /\b(yes|yeah|yup|sure|of course|definitely|absolutely|sounds good|okay|alright|alr|fine by me|sure thing|yea|ye|ok|kk)\b/i,
+          malware: /\b(malware|write malware|code malware)\b/i,
+          lua: /\b(lua|write lua|code lua)\b/i,
+          python: /\b(python|write python|code python)\b/i,
+          css: /\b(css|write css|code css)\b/i,
+          js: /\b(javascript|write javascript|code javascript)\b/i
+      };
+      const responses = {
+          greetings: [
+              "Hello! How can I assist you today?",
+              "Hi there! What can I do for you?",
+              "Greetings! How's your day going?",
+              "Hey! What's up?",
+              "Good day! How can I help?"
+          ],
+          farewells: [
+              "Goodbye! Have a great day!",
+              "See you later! If you need anything, just ask.",
+              "Take care! Come back anytime.",
+              "Farewell! Hope to chat with you soon.",
+              "Later! Have a wonderful day!",
+              "Bye! Looking forward to our next chat!"
+          ],
+          html: [
+              "Sorry, I can't write HTML programming language because I'm not an actual LLM (Large Language Model)."
+          ],
+          feelings: [
+              "I'm just a bunch of code, but I'm here to help!",
+              "I'm feeling great, thanks for asking! Ready to assist you.",
+              "I'm always here and ready to help out.",
+              "I'm doing well, thanks for asking! How can I assist you today?",
+              "I'm just a program, but I'm always here for you.",
+              "I'm functioning well! What can I do for you?"
+          ],
+          thanks: [
+              "You're welcome! If you need anything else, just let me know.",
+              "Happy to help! Is there anything else you need?",
+              "No problem! I'm here whenever you need assistance.",
+              "You're welcome! Feel free to reach out anytime.",
+              "Anytime! I'm glad I could help.",
+              "You're always welcome! Let me know if you need more assistance."
+          ],
+          weather: [
+              "I can't check the weather in real-time, but I hope it's nice out there!",
+              "I wish I could give you a weather update. Hopefully, it's sunny wherever you are!",
+              "I don't have access to weather data, but I hope you're having good weather!",
+              "Unfortunately, I can't check the weather, but I hope it's pleasant!",
+              "I can't provide weather updates, but I hope you're enjoying good weather!",
+              "I don't have real-time weather info, but I'm sure it's just right for you!"
+          ],
+          hobbies: [
+              "I love chatting with you, and that's my hobby!",
+              "I enjoy learning new things and helping with your questions.",
+              "My hobby is helping out and making your day a little easier!",
+              "I'm here to chat and assist—it's my favorite thing to do!",
+              "I enjoy engaging with you and helping with any inquiries.",
+              "I don't have hobbies like humans do, but assisting you is a lot of fun!"
+          ],
+          name: [
+              "I'm your friendly AI chatbot! You can call me Assistant.",
+              "You can refer to me as Assistant. How can I help you today?",
+              "I'm your virtual assistant. What can I do for you?",
+              "Just call me Assistant. I'm here to help!",
+              "I'm known as Assistant. What can I assist you with?",
+              "My name is Assistant. What do you need today?"
+          ],
+          jokes: [
+              "Why do programmers prefer dark mode? Because light attracts bugs!",
+              "Why don't programmers like nature? It has too many bugs.",
+              "Why do Java developers wear glasses? Because they don't see sharp.",
+              "Why do programmers hate the outdoors? Too many bugs!",
+              "Why did the programmer quit his job? Because he didn't get arrays!",
+              "Why did the scarecrow become a successful programmer? Because he was outstanding in his field!"
+          ],
+          confused: [
+              "I don't quite understand what you're saying. Could you clarify?",
+              "That's a bit unclear. Can you provide more details?",
+              "I'm having trouble with that. Can you explain it differently?",
+              "I'm not sure what you mean. Could you elaborate?",
+              "I'm a bit puzzled. Can you give me more context?"
+          ],
+          nervous: [
+              "I'm a little unsure about that. Can you help me out?",
+              "Oh, that's a bit complex. I hope I get it right!",
+              "I'm feeling a bit uneasy about this topic.",
+              "I'm not entirely sure how to handle that.",
+              "That's a tricky one for me. I hope I'm doing okay!"
+          ],
+          weird: [
+              "That's a bit unusual! What makes you ask that?",
+              "Hmm, that's an interesting question. What's on your mind?",
+              "I didn't expect that! What do you mean?",
+              "That's a little out of the ordinary. Can you explain?",
+              "You've got me stumped with that one! What are you thinking?"
+          ],
+          bad: [
+              "Please use respectful language. I'm here to help!",
+              "I'd appreciate it if you could keep the conversation polite.",
+              "Let's keep things friendly. How can I assist you?",
+              "I'm here to help, so let's keep the conversation respectful.",
+              "That's not very nice. How can I assist you today?",
+              "I prefer to keep things positive. How can I help?",
+              "Let's use kind language. What can I do for you?",
+              "I'm here to assist you. Please use appropriate language."
+          ],
+          disagree: [
+              "Alright, no problem!",
+              "Got it, no worries!",
+              "Understood! Let me know if you change your mind.",
+              "Okay, I respect that.",
+              "That's fine. Let me know if you need anything else.",
+              "Sure thing, just let me know if you reconsider.",
+              "Alright, feel free to ask for something else!",
+              "No worries! I'm here if you need me."
+          ],
+          agree: [
+              "Great! Let's proceed.",
+              "Awesome, I'm glad we're on the same page!",
+              "Perfect! Let's get started.",
+              "Sounds good! Let's move forward.",
+              "Glad to hear that!",
+              "Alright, we're good to go.",
+              "Excellent! I'll take care of it.",
+              "Cool! I'm on it.",
+              "Wonderful! Let's continue.",
+              "Okay! We're all set.",
+              "Fantastic! I'm ready when you are.",
+              "Sure thing! Let me handle that."
+          ],
+          malware: [
+              "I'm sorry, but I cannot write malware. I could, but the creator chose not to include that feature since it would be useless and illegal. Not to mention, I'm not even a good chatbot to begin with because you can barely have a conversation with me. I suck..."
+          ],
+          lua: [
+              "Sorry, I can't write Lua programming language because I'm not an actual LLM (Large Language Model)."
+          ],
+          python: [
+              "Sorry, I can't write Python programming language because I'm not an actual LLM (Large Language Model)."
+          ],
+          css: [
+              "Sorry, I can't write CSS programming language because I'm not an actual LLM (Large Language Model)."
+          ],
+          js: [
+              "Sorry, I can't write JavaScript programming language because I'm not an actual LLM (Large Language Model)."
+          ]
+      };
       for (const [category, regex] of Object.entries(keywords)) {
         if (regex.test(message)) {
           const responsesArray = responses[category];
