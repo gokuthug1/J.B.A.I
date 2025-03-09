@@ -478,12 +478,12 @@ function showSettingsModal() {
               "I don't have hobbies like humans do, but assisting you is a lot of fun!"
           ],
           name: [
-              "I'm your friendly AI chatbot! You can call me Assistant.",
-              "You can refer to me as Assistant. How can I help you today?",
-              "I'm your virtual assistant. What can I do for you?",
-              "Just call me Assistant. I'm here to help!",
-              "I'm known as Assistant. What can I assist you with?",
-              "My name is Assistant. What do you need today?"
+              "I'm J.B.A.I | An AI chatbot!",
+              "You can refer to me as J.B.A.I. How can I help you today?",
+              "I'm your helpful assistant, J.B.A.I. What can I do for you?",
+              "Just call me J.B.A.I. I'm here to help!",
+              "I'm known as J.B.A.I. What can I assist you with?",
+              "My name is J.B.A.I. What do you need today?"
           ],
           jokes: [
               "Why do programmers prefer dark mode? Because light attracts bugs!",
