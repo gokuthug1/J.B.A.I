@@ -1,5 +1,5 @@
 # ChatGPT
-This is ChatGPT but I made it. I will updatr this whenever I have time but this isn't a real LLM I just made something similar but this is just a ChatGPT clone lol.
+This is ChatGPT but I made it. I will update this whenever I have time but this isn't a real LLM I just made something similar but this is just a ChatGPT clone lol.
 
 Go try it out lol it's so bad: 🔽
 
