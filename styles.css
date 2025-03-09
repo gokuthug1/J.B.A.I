@@ -1,0 +1,265 @@
+/* Fade-Out Animation */
+@keyframes fadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.9); }
+}
+.fade-out { animation: fadeOut 0.4s ease forwards; }
+
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Chat Container */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Message Area */
+.message-area {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.message-area::-webkit-scrollbar { display: none; }
+
+/* Message Styles */
+.message {
+  display: flex;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.message.user { justify-content: flex-end; }
+.message.bot { justify-content: flex-start; }
+.message-content {
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #e0e0e0;
+  max-width: 80%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+}
+.message.user .message-content {
+  background-color: #f4f4f4;
+  align-self: flex-end;
+}
+.message.bot .message-content code {
+  background-color: #000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+}
+
+/* Chat Input Area */
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+textarea {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  resize: none;
+  outline: none;
+  height: 40px;
+  overflow-y: hidden;
+  font-size: 14px;
+  background-color: #f0f0f0;
+}
+
+/* Toggle Options Button (now a plus symbol) placed to the left */
+#toggle-options-button {
+  background-color: #fff;
+  /* Removed outer ring */
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+#toggle-options-button:hover { background-color: #f0f0f0; }
+/* Refined Plus Icon in Black & White */
+#toggle-options-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Send Button remains unchanged */
+#send-button {
+  background-color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+#send-button svg { width: 24px; height: 24px; fill: #fff; }
+#send-button:hover { background-color: #555; }
+
+/* Options Card (appears when toggle button is clicked) */
+.options-card {
+  position: absolute;
+  bottom: 60px; /* above the input area */
+  left: 10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 150;
+}
+.options-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.options-card button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.options-card button svg {
+  width: 20px;
+  height: 20px;
+  fill: #000;
+}
+
+/* Modal Overlay & Settings Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.settings-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 80%;
+  max-width: 320px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: left;
+  animation: slideIn 0.3s ease-out;
+}
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.settings-card h2 { margin-top: 0; font-size: 20px; color: #333; }
+.settings-row {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.settings-row label { font-size: 16px; color: #333; }
+.settings-card select {
+  max-width: 150px;
+  padding: 4px;
+  font-size: 14px;
+}
+.settings-card button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Switch Toggle Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider { background-color: #000; }
+input:checked + .slider:before { transform: translateX(26px); }
+
+/* Additional: Voice Volume Slider */
+.volume-slider {
+  width: 100px;
+}
+
+/* Responsive Styles */
+@media (max-width: 500px) {
+  .message-content { font-size: 12px; }
+  textarea { font-size: 14px; }
+  button { width: 36px; height: 36px; }
+  #toggle-options-button, #send-button { width: 36px; height: 36px; }
+  #toggle-options-button svg, .options-card button svg { width: 18px; height: 18px; }
+}
