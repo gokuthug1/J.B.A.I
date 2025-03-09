@@ -44,7 +44,7 @@
         overflow: hidden;
         position: relative;
     }
-    /* Message Area spans full width */
+    /* Message Area */
     .message-area {
         flex: 1;
         padding: 10px;
@@ -134,7 +134,6 @@
     button:hover {
         background-color: #555;
     }
-    /* SVG Icon Sizing for Buttons */
     svg {
         width: 24px;
         height: 24px;
@@ -175,45 +174,82 @@
         font-size: 0.8em;
         color: #888;
     }
-    /* Delete Confirmation Card Styles */
-    .delete-confirmation-card {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 10px;
-        border-radius: 8px;
-        background: #fff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        display: flex;
-        gap: 10px;
-        z-index: 100;
+    /* Modal Overlay & Confirmation Card Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    .delete-confirmation-card button {
-        border: none;
-        border-radius: 4px;
-        padding: 5px 10px;
-        cursor: pointer;
+    .delete-confirmation-card {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      width: 80%;
+      max-width: 300px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+         transform: translateY(20px);
+         opacity: 0;
+      }
+      to {
+         transform: translateY(0);
+         opacity: 1;
+      }
+    }
+    .delete-confirmation-card p {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+    .confirmation-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .confirmation-buttons button {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .confirmation-buttons .delete-btn {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+    .confirmation-buttons .cancel-btn {
+      background-color: #34495e;
+      color: #fff;
     }
     /* Responsive Styles */
     @media (max-width: 500px) {
-        .message-content {
-            font-size: 12px;
-        }
-        textarea {
-            font-size: 14px;
-        }
-        button {
-            width: 36px;
-            height: 36px;
-        }
+      .message-content {
+          font-size: 12px;
+      }
+      textarea {
+          font-size: 14px;
+      }
+      button {
+          width: 36px;
+          height: 36px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <div id="message-area" class="message-area">
-    </div>
+    <div id="message-area" class="message-area"></div>
     <div class="chat-input-container">
       <input type="file" id="file-upload" style="display: none;" />
       <button id="upload-button" title="Upload File">
@@ -235,64 +271,74 @@
       messageEl.classList.add('fade-out');
       setTimeout(() => messageEl.remove(), 400);
     }
-
-    // Shows a confirmation card with "Delete" and "Cancel" options.
+    
+    // Show a sleek modal confirmation for deletion.
     function showConfirmation(messageEl) {
-      // Avoid duplicate confirmation cards.
-      if (messageEl.querySelector('.delete-confirmation-card')) return;
+      // Create overlay.
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      
+      // Create confirmation card.
       const card = document.createElement('div');
       card.className = 'delete-confirmation-card';
-
-      // Create Delete button.
+      
+      // Title text.
+      const promptText = document.createElement('p');
+      promptText.textContent = 'Delete this message?';
+      card.appendChild(promptText);
+      
+      // Create buttons container.
+      const btnContainer = document.createElement('div');
+      btnContainer.className = 'confirmation-buttons';
+      
       const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
       deleteBtn.textContent = 'Delete';
-      deleteBtn.style.backgroundColor = 'red';
-      deleteBtn.style.color = 'white';
-
-      // Create Cancel button.
+      
       const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'cancel-btn';
       cancelBtn.textContent = 'Cancel';
-      cancelBtn.style.backgroundColor = 'black';
-      cancelBtn.style.color = 'white';
-
-      card.appendChild(deleteBtn);
-      card.appendChild(cancelBtn);
-
-      // Ensure the message is positioned relatively so the card can be positioned absolutely.
-      messageEl.style.position = 'relative';
-      messageEl.appendChild(card);
-
+      
+      btnContainer.appendChild(deleteBtn);
+      btnContainer.appendChild(cancelBtn);
+      card.appendChild(btnContainer);
+      
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+      
+      // Button actions.
       deleteBtn.addEventListener('click', () => {
-          deleteMessage(messageEl);
+        deleteMessage(messageEl);
+        overlay.remove();
       });
       cancelBtn.addEventListener('click', () => {
-          card.remove();
+        overlay.remove();
       });
     }
-
-    // Attach event listeners for deletion on PC (shift-click) and mobile (long press)
+    
+    // Attach event listeners for deletion on PC (shift-click) and mobile (long press).
     function addDeleteListener(messageEl) {
-      // PC: Delete on shift-click
+      // PC: Delete on shift-click.
       messageEl.addEventListener('click', (e) => {
         if (e.shiftKey) {
           deleteMessage(messageEl);
         }
       });
-      // Mobile: Show confirmation card on long press (800ms threshold)
+      // Mobile: Show confirmation modal on long press (800ms threshold).
       let pressTimer;
-      messageEl.addEventListener('touchstart', (e) => {
+      messageEl.addEventListener('touchstart', () => {
         pressTimer = setTimeout(() => {
           showConfirmation(messageEl);
         }, 800);
       });
-      messageEl.addEventListener('touchend', (e) => {
+      messageEl.addEventListener('touchend', () => {
         clearTimeout(pressTimer);
       });
-      messageEl.addEventListener('touchmove', (e) => {
+      messageEl.addEventListener('touchmove', () => {
         clearTimeout(pressTimer);
       });
     }
-
+    
     // Helper functions for link previews.
     function updatePreviewWithFavicon(previewElement, pageUrl) {
       fetch(pageUrl)
@@ -318,7 +364,7 @@
         })
         .catch(err => console.error('Error fetching favicon:', err));
     }
-
+    
     function buildGenericPreview(url) {
       try {
         const urlObj = new URL(url);
@@ -333,59 +379,59 @@
         previewContainer.className = 'preview-container';
         previewContainer.href = url;
         previewContainer.target = '_blank';
-
+    
         const img = document.createElement('img');
         img.src = placeholder;
         img.alt = 'Preview Image';
         previewContainer.appendChild(img);
-
+    
         const textDiv = document.createElement('div');
         textDiv.className = 'preview-text';
-
+    
         const titleDiv = document.createElement('div');
         titleDiv.className = 'preview-title';
         titleDiv.textContent = domain;
         textDiv.appendChild(titleDiv);
-
+    
         const descDiv = document.createElement('div');
         descDiv.className = 'preview-description';
         descDiv.textContent = `Link preview for ${url}`;
         textDiv.appendChild(descDiv);
-
+    
         const urlDiv = document.createElement('div');
         urlDiv.className = 'preview-url';
         urlDiv.textContent = url;
         textDiv.appendChild(urlDiv);
-
+    
         previewContainer.appendChild(textDiv);
-
+    
         updatePreviewWithFavicon(previewContainer, url);
-
+    
         return previewContainer;
       } catch(e) {
         const fallbackContainer = document.createElement('a');
         fallbackContainer.className = 'preview-container';
         fallbackContainer.href = url;
         fallbackContainer.target = '_blank';
-
+    
         const textDiv = document.createElement('div');
         textDiv.className = 'preview-text';
-
+    
         const titleDiv = document.createElement('div');
         titleDiv.className = 'preview-title';
         titleDiv.textContent = url;
         textDiv.appendChild(titleDiv);
-
+    
         const descDiv = document.createElement('div');
         descDiv.className = 'preview-description';
         descDiv.textContent = 'Link preview not available.';
         textDiv.appendChild(descDiv);
-
+    
         fallbackContainer.appendChild(textDiv);
         return fallbackContainer;
       }
     }
-
+    
     function checkForLinkPreview(contentEl, message) {
       const urlRegex = /((https?:\/\/)?[\w.-]+\.[a-z]{2,}(\/\S*)?)/gi;
       const urls = message.match(urlRegex);
@@ -401,42 +447,42 @@
         contentEl.parentNode.appendChild(previewWrapper);
       }
     }
-
+    
     // Display a message and check for link previews if plain text.
     function displayMessage(content, sender, isHTML = false) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
       addDeleteListener(messageEl);
-
+    
       const contentEl = document.createElement('div');
       contentEl.className = 'message-content';
       contentEl[isHTML ? "innerHTML" : "textContent"] = content;
       messageEl.appendChild(contentEl);
       document.getElementById('message-area').appendChild(messageEl);
       document.getElementById('message-area').scrollTop = document.getElementById('message-area').scrollHeight;
-
+    
       if (!isHTML) {
         checkForLinkPreview(contentEl, content);
       }
       return messageEl;
     }
-
+    
     // Typewriter effect for bot messages.
     function displayMessageWithTyping(content, sender) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
       addDeleteListener(messageEl);
-
+    
       const contentEl = document.createElement('div');
       contentEl.className = 'message-content';
       messageEl.appendChild(contentEl);
       document.getElementById('message-area').appendChild(messageEl);
       document.getElementById('message-area').scrollTop = document.getElementById('message-area').scrollHeight;
-
+    
       let typedMessage = '';
       let charIndex = 0;
       const typingDelay = 32;
-
+    
       function typeLetter() {
         if (charIndex < content.length) {
           typedMessage += content.charAt(charIndex);
@@ -451,7 +497,7 @@
       }
       typeLetter();
     }
-
+    
     // AI Chatbot Logic.
     function generateResponse(message) {
       const keywords = {
@@ -622,7 +668,7 @@
       }
       return "I'm very sorry, but I'm not experienced enough to respond to that. Perhaps I'll get better in the future!";
     }
-
+    
     // Handle sending a message.
     function sendMessage() {
       const chatInput = document.getElementById('chat-input');
@@ -631,7 +677,7 @@
         displayMessage(userMessage, 'user');
         chatInput.value = '';
         chatInput.focus();
-
+    
         // Show typing indicator.
         const typingIndicator = displayMessage("●", 'bot');
         setTimeout(() => {
@@ -641,17 +687,17 @@
         }, 1300);
       }
     }
-
+    
     // File upload handler.
     function handleFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-
+    
       const reader = new FileReader();
       reader.onload = function() {
         const fileContent = reader.result;
         let embedHTML = '';
-
+    
         function escapeHTML(text) {
           return text
             .replace(/&/g, '&amp;')
@@ -660,7 +706,7 @@
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
         }
-
+    
         if (file.type === 'text/html') {
           embedHTML = `<div>
               <h3>HTML File Content:</h3>
@@ -719,14 +765,14 @@
         }
         displayMessage(embedHTML, 'bot', true);
       };
-
+    
       reader.onerror = function() {
         displayMessage("Error reading file.", 'bot');
       };
-
+    
       reader.readAsText(file);
     }
-
+    
     // Set up event listeners.
     document.getElementById('chat-input').addEventListener('keydown', (event) => {
       if (event.key === 'Enter' && !event.shiftKey) {
