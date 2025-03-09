@@ -8,247 +8,272 @@
   <style>
     /* Fade-Out Animation for Message Removal */
     @keyframes fadeOut {
-      from {
-          opacity: 1;
-          transform: scale(1);
-      }
-      to {
-          opacity: 0;
-          transform: scale(0.9);
-      }
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.9); }
     }
-    .fade-out {
-      animation: fadeOut 0.4s ease forwards;
-    }
+    .fade-out { animation: fadeOut 0.4s ease forwards; }
+    
     /* Base Styles */
     body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f3f4f6;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
     }
-    /* Chat Container spans full viewport */
+    /* Chat Container */
     .chat-container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      background-color: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+    }
+    /* Settings Button */
+    #settings-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 200;
+    }
+    /* Refined gear icon */
+    #settings-button svg {
+      width: 28px;
+      height: 28px;
+      fill: #333;
     }
     /* Message Area */
     .message-area {
-        flex: 1;
-        padding: 10px;
-        overflow-y: auto;
-        background-color: #ffffff;
-        border-bottom: 1px solid #ddd;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        box-sizing: border-box;
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .message-area::-webkit-scrollbar {
-        display: none;
-    }
+    .message-area::-webkit-scrollbar { display: none; }
+    
     /* Message Styles */
     .message {
-        display: flex;
-        align-items: flex-start;
-        box-sizing: border-box;
+      display: flex;
+      align-items: flex-start;
+      box-sizing: border-box;
     }
-    .message.user {
-        justify-content: flex-end;
-    }
-    .message.bot {
-        justify-content: flex-start;
-    }
+    .message.user { justify-content: flex-end; }
+    .message.bot { justify-content: flex-start; }
     .message-content {
-        padding: 10px;
-        border-radius: 15px;
-        background-color: #e0e0e0;
-        max-width: 80%;
-        word-wrap: break-word;
-        white-space: pre-wrap;
-        box-sizing: border-box;
+      padding: 10px;
+      border-radius: 15px;
+      background-color: #e0e0e0;
+      max-width: 80%;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      box-sizing: border-box;
     }
     .message.user .message-content {
-        background-color: #f4f4f4;
-        align-self: flex-end;
+      background-color: #f4f4f4;
+      align-self: flex-end;
     }
     .message.bot .message-content code {
-        background-color: black;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        display: block;
+      background-color: #000;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      display: block;
     }
+    
     /* Chat Input Area */
     .chat-input-container {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        gap: 10px;
-        border-top: 1px solid #ddd;
-        background-color: #ffffff;
-        position: sticky;
-        bottom: 0;
-        width: 100%;
-        box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      gap: 10px;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      box-sizing: border-box;
     }
     textarea {
-        width: calc(100% - 60px);
-        border: none;
-        border-radius: 12px;
-        padding: 10px;
-        resize: none;
-        outline: none;
-        height: 40px;
-        overflow-y: hidden;
-        font-size: 14px;
-        background-color: #f0f0f0;
+      width: calc(100% - 60px);
+      border: none;
+      border-radius: 12px;
+      padding: 10px;
+      resize: none;
+      outline: none;
+      height: 40px;
+      overflow-y: hidden;
+      font-size: 14px;
+      background-color: #f0f0f0;
     }
     /* Button Styles */
     button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: none;
-        background-color: #000;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background-color: #000;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-    button:hover {
-        background-color: #555;
-    }
-    svg {
-        width: 24px;
-        height: 24px;
-        fill: currentColor;
-    }
+    button:hover { background-color: #555; }
+    svg { width: 24px; height: 24px; fill: currentColor; }
+    
     /* Link Preview Styles */
-    .link-preview {
-        margin-top: 8px;
-    }
+    .link-preview { margin-top: 8px; }
     .preview-container {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 8px;
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        transition: background-color 0.3s;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transition: background-color 0.3s;
     }
-    .preview-container:hover {
-        background-color: #f9f9f9;
-    }
+    .preview-container:hover { background-color: #f9f9f9; }
     .preview-container img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-right: 8px;
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 8px;
     }
-    .preview-title {
-        font-weight: bold;
-    }
-    .preview-description {
-        font-size: 0.9em;
-        color: #555;
-    }
-    .preview-url {
-        font-size: 0.8em;
-        color: #888;
-    }
-    /* Modal Overlay & Confirmation Card Styles */
+    .preview-title { font-weight: bold; }
+    .preview-description { font-size: 0.9em; color: #555; }
+    .preview-url { font-size: 0.8em; color: #888; }
+    
+    /* Modal Overlay & Settings Modal Styles */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.5);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
-    .delete-confirmation-card {
+    .settings-card {
       background-color: #fff;
       border-radius: 12px;
       padding: 20px;
       width: 80%;
-      max-width: 300px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      text-align: center;
+      max-width: 320px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      text-align: left;
       animation: slideIn 0.3s ease-out;
     }
     @keyframes slideIn {
-      from {
-         transform: translateY(20px);
-         opacity: 0;
-      }
-      to {
-         transform: translateY(0);
-         opacity: 1;
-      }
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-    .delete-confirmation-card p {
-      margin-bottom: 20px;
+    .settings-card h2 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #333;
+    }
+    .settings-row {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .settings-row label {
       font-size: 16px;
       color: #333;
     }
-    .confirmation-buttons {
-      display: flex;
-      gap: 10px;
+    /* Refined select box */
+    .settings-card select {
+      max-width: 150px;
+      padding: 4px;
+      font-size: 14px;
     }
-    .confirmation-buttons button {
-      flex: 1;
-      padding: 10px 0;
+    .settings-card button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
       border: none;
       border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .confirmation-buttons .delete-btn {
-      background-color: #e74c3c;
-      color: #fff;
-    }
-    .confirmation-buttons .cancel-btn {
       background-color: #34495e;
       color: #fff;
+      font-size: 16px;
+      cursor: pointer;
     }
+    /* Switch Toggle Styles */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #34495e;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
     /* Responsive Styles */
     @media (max-width: 500px) {
-      .message-content {
-          font-size: 12px;
-      }
-      textarea {
-          font-size: 14px;
-      }
-      button {
-          width: 36px;
-          height: 36px;
-      }
+      .message-content { font-size: 12px; }
+      textarea { font-size: 14px; }
+      button { width: 36px; height: 36px; }
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
+    <!-- Settings Button with gear icon -->
+    <button id="settings-button" title="Settings">
+      <svg viewBox="0 0 24 24">
+        <path d="M19.14,12.94c0-.32.06-.63.06-.94s-.06-.63-.06-.94l2.03-1.58a.5.5,0,0,0,.12-.59l-1.92-3.32a.5.5,0,0,0-.57-.2l-2.39.96a7.007,7.007,0,0,0-1.63-.94L14,2.5a.5.5,0,0,0-.5-.5h-3a.5.5,0,0,0-.5.5L9,5.08a7.007,7.007,0,0,0-1.63.94l-2.39-.96a.5.5,0,0,0-.57.2L2.49,8.52a.5.5,0,0,0,.12.59l2.03,1.58c0,.32-.06.63-.06.94s.06.63.06.94L2.61,14.5a.5.5,0,0,0-.12.59l1.92,3.32a.5.5,0,0,0,.57.2l2.39-.96a7.007,7.007,0,0,0,1.63.94l.5,2.58a.5.5,0,0,0,.5.42h3a.5.5,0,0,0,.5-.42l.5-2.58a7.007,7.007,0,0,0,1.63-.94l2.39.96a.5.5,0,0,0,.57-.2l1.92-3.32a.5.5,0,0,0-.12-.59ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/>
+      </svg>
+    </button>
+    
     <div id="message-area" class="message-area"></div>
     <div class="chat-input-container">
       <input type="file" id="file-upload" style="display: none;" />
@@ -265,78 +290,164 @@
       </button>
     </div>
   </div>
+  
   <script>
+    // Global settings variables.
+    let ttsEnabled = false;
+    let selectedVoice = null;
+
+    // Function to speak text using the Web Speech API.
+    function speakTTS(text) {
+      if (window.speechSynthesis && ttsEnabled && text.trim() !== '') {
+        const utterance = new SpeechSynthesisUtterance(text);
+        if (selectedVoice) {
+          utterance.voice = selectedVoice;
+        }
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Populate the voice selection dropdown.
+    function populateVoiceList() {
+      const voiceSelect = document.getElementById('voiceSelect');
+      if (!voiceSelect) return;
+      const voices = window.speechSynthesis.getVoices();
+      voiceSelect.innerHTML = '';
+      voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+      // Set default voice if available.
+      if (voices.length && selectedVoice === null) {
+        selectedVoice = voices[0];
+        voiceSelect.selectedIndex = 0;
+      }
+    }
+    
+    if (typeof speechSynthesis !== 'undefined') {
+      window.speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+    
+    // Show the settings modal.
+    function showSettingsModal() {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      
+      const card = document.createElement('div');
+      card.className = 'settings-card';
+      
+      const title = document.createElement('h2');
+      title.textContent = 'Settings';
+      card.appendChild(title);
+      
+      // TTS toggle row using switch.
+      const ttsRow = document.createElement('div');
+      ttsRow.className = 'settings-row';
+      const ttsLabel = document.createElement('label');
+      ttsLabel.textContent = 'Enable TTS';
+      
+      const switchLabel = document.createElement('label');
+      switchLabel.className = 'switch';
+      const ttsToggle = document.createElement('input');
+      ttsToggle.type = 'checkbox';
+      ttsToggle.checked = ttsEnabled;
+      ttsToggle.addEventListener('change', () => {
+        ttsEnabled = ttsToggle.checked;
+      });
+      const slider = document.createElement('span');
+      slider.className = 'slider';
+      
+      switchLabel.appendChild(ttsToggle);
+      switchLabel.appendChild(slider);
+      
+      ttsRow.appendChild(ttsLabel);
+      ttsRow.appendChild(switchLabel);
+      card.appendChild(ttsRow);
+      
+      // Voice selection row.
+      const voiceRow = document.createElement('div');
+      voiceRow.className = 'settings-row';
+      const voiceLabel = document.createElement('label');
+      voiceLabel.textContent = 'Bot Voice';
+      const voiceSelect = document.createElement('select');
+      voiceSelect.id = 'voiceSelect';
+      voiceSelect.addEventListener('change', () => {
+        const voices = window.speechSynthesis.getVoices();
+        selectedVoice = voices[voiceSelect.selectedIndex];
+      });
+      voiceRow.appendChild(voiceLabel);
+      voiceRow.appendChild(voiceSelect);
+      card.appendChild(voiceRow);
+      
+      // Close button.
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = 'Save & Close';
+      closeBtn.addEventListener('click', () => {
+        overlay.remove();
+      });
+      card.appendChild(closeBtn);
+      
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+      
+      populateVoiceList();
+    }
+    
+    // Settings button event listener.
+    document.getElementById('settings-button').addEventListener('click', showSettingsModal);
+    
     // Helper function to delete a message with fade-out animation.
     function deleteMessage(messageEl) {
       messageEl.classList.add('fade-out');
       setTimeout(() => messageEl.remove(), 400);
     }
     
-    // Show a sleek modal confirmation for deletion.
+    // Show a sleek modal confirmation for deletion (mobile).
     function showConfirmation(messageEl) {
-      // Create overlay.
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
       
-      // Create confirmation card.
       const card = document.createElement('div');
-      card.className = 'delete-confirmation-card';
+      card.className = 'settings-card';
       
-      // Title text.
-      const promptText = document.createElement('p');
-      promptText.textContent = 'Delete this message?';
-      card.appendChild(promptText);
-      
-      // Create buttons container.
-      const btnContainer = document.createElement('div');
-      btnContainer.className = 'confirmation-buttons';
+      const prompt = document.createElement('h2');
+      prompt.textContent = 'Delete this message?';
+      card.appendChild(prompt);
       
       const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'delete-btn';
       deleteBtn.textContent = 'Delete';
-      
-      const cancelBtn = document.createElement('button');
-      cancelBtn.className = 'cancel-btn';
-      cancelBtn.textContent = 'Cancel';
-      
-      btnContainer.appendChild(deleteBtn);
-      btnContainer.appendChild(cancelBtn);
-      card.appendChild(btnContainer);
-      
-      overlay.appendChild(card);
-      document.body.appendChild(overlay);
-      
-      // Button actions.
+      deleteBtn.style.backgroundColor = '#e74c3c';
       deleteBtn.addEventListener('click', () => {
         deleteMessage(messageEl);
         overlay.remove();
       });
+      
+      const cancelBtn = document.createElement('button');
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.style.backgroundColor = '#34495e';
       cancelBtn.addEventListener('click', () => {
         overlay.remove();
       });
+      
+      card.appendChild(deleteBtn);
+      card.appendChild(cancelBtn);
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
     }
     
     // Attach event listeners for deletion on PC (shift-click) and mobile (long press).
     function addDeleteListener(messageEl) {
-      // PC: Delete on shift-click.
       messageEl.addEventListener('click', (e) => {
-        if (e.shiftKey) {
-          deleteMessage(messageEl);
-        }
+        if (e.shiftKey) { deleteMessage(messageEl); }
       });
-      // Mobile: Show confirmation modal on long press (800ms threshold).
       let pressTimer;
       messageEl.addEventListener('touchstart', () => {
-        pressTimer = setTimeout(() => {
-          showConfirmation(messageEl);
-        }, 800);
+        pressTimer = setTimeout(() => { showConfirmation(messageEl); }, 800);
       });
-      messageEl.addEventListener('touchend', () => {
-        clearTimeout(pressTimer);
-      });
-      messageEl.addEventListener('touchmove', () => {
-        clearTimeout(pressTimer);
-      });
+      messageEl.addEventListener('touchend', () => { clearTimeout(pressTimer); });
+      messageEl.addEventListener('touchmove', () => { clearTimeout(pressTimer); });
     }
     
     // Helper functions for link previews.
@@ -350,15 +461,10 @@
           if (iconLink) {
             let faviconUrl = iconLink.getAttribute('href');
             if (faviconUrl) {
-              try {
-                faviconUrl = new URL(faviconUrl, pageUrl).href;
-              } catch (e) {
-                console.error("Error resolving favicon URL:", e);
-              }
+              try { faviconUrl = new URL(faviconUrl, pageUrl).href; }
+              catch (e) { console.error("Error resolving favicon URL:", e); }
               const imgEl = previewElement.querySelector('img');
-              if (imgEl) {
-                imgEl.src = faviconUrl;
-              }
+              if (imgEl) { imgEl.src = faviconUrl; }
             }
           }
         })
@@ -437,9 +543,7 @@
       const urls = message.match(urlRegex);
       if (urls && urls.length > 0) {
         let url = urls[0];
-        if (!url.startsWith('http')) {
-          url = 'http://' + url;
-        }
+        if (!url.startsWith('http')) { url = 'http://' + url; }
         const previewElement = buildGenericPreview(url);
         const previewWrapper = document.createElement('div');
         previewWrapper.className = 'link-preview';
@@ -461,13 +565,11 @@
       document.getElementById('message-area').appendChild(messageEl);
       document.getElementById('message-area').scrollTop = document.getElementById('message-area').scrollHeight;
     
-      if (!isHTML) {
-        checkForLinkPreview(contentEl, content);
-      }
+      if (!isHTML) { checkForLinkPreview(contentEl, content); }
       return messageEl;
     }
     
-    // Typewriter effect for bot messages.
+    // Typewriter effect for bot messages with TTS.
     function displayMessageWithTyping(content, sender) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
@@ -492,6 +594,7 @@
         } else {
           setTimeout(() => {
             contentEl.textContent = typedMessage;
+            if (sender === 'bot' && ttsEnabled) { speakTTS(typedMessage); }
           }, 500);
         }
       }
