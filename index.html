@@ -119,7 +119,7 @@ body {
 }
 
 textarea {
-    width: 100%;
+    width: calc(100% - 60px); /* Adjusted for button widths */
     border: none;
     border-radius: 12px;
     padding: 10px;
@@ -147,24 +147,6 @@ button {
 }
 
 button:hover {
-    background-color: #555;
-}
-
-/* Upload Button as a Circle */
-#upload-button {
-    background-color: #000; /* Ensure consistent styling */
-}
-
-#upload-button:hover {
-    background-color: #555;
-}
-
-/* Send Button updated to match Upload Button style */
-#send-button {
-    background-color: #000; /* Ensure consistent styling */
-}
-
-#send-button:hover {
     background-color: #555;
 }
 
@@ -216,6 +198,20 @@ svg {
     font-size: 0.8em;
     color: #888;
 }
+
+/* Responsive Styles */
+@media (max-width: 500px) {
+    .message-content {
+        font-size: 12px; /* Smaller font size for mobile */
+    }
+    textarea {
+        font-size: 14px; /* Ensure textarea text is readable */
+    }
+    button {
+        width: 36px; /* Slightly smaller buttons */
+        height: 36px; /* Slightly smaller buttons */
+    }
+}
   </style>
 </head>
 <body>
@@ -223,18 +219,13 @@ svg {
     <div id="message-area" class="message-area">
     </div>
     <div class="chat-input-container">
-      <!-- Hidden file input -->
       <input type="file" id="file-upload" style="display: none;" />
-      <!-- Circle File Upload Button with New SVG Icon -->
       <button id="upload-button" title="Upload File">
         <svg viewBox="0 0 24 24">
-          <!-- New Upload Icon: Upward Arrow with a Base -->
           <path d="M5 20h14v-2H5v2zm7-14l-5 5h3v4h4v-4h3l-5-5z"/>
         </svg>
       </button>
-      <!-- Message input area -->
       <textarea id="chat-input" placeholder="Type your message..."></textarea>
-      <!-- Send Button matching the Upload Button -->
       <button id="send-button" title="Send Message">
         <svg viewBox="0 0 24 24">
           <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"></path>
@@ -242,7 +233,6 @@ svg {
       </button>
     </div>
   </div>
-
   <script>
     // Helper function to update the preview image with the site's favicon
     function updatePreviewWithFavicon(previewElement, pageUrl) {
@@ -359,14 +349,14 @@ svg {
     function displayMessage(content, sender, isHTML = false) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
-    messageEl.addEventListener('click', (e) => {
+      messageEl.addEventListener('click', (e) => {
         if (e.shiftKey) {
             // Add fade-out class to trigger animation
             messageEl.classList.add('fade-out');
             // Remove the message after animation duration (0.4s)
             setTimeout(() => messageEl.remove(), 400);
         }
-    });
+      });
 
       const contentEl = document.createElement('div');
       contentEl.className = 'message-content';
