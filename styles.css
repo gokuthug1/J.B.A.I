@@ -115,7 +115,7 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-#toggle-options-button:hover { background-color: #f0f0f0; }
+#toggle-options-button:hover { background-color: #555; }
 /* Refined Plus Icon in Black & White */
 #toggle-options-button svg {
   width: 20px;
