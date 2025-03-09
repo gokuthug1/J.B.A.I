@@ -343,80 +343,91 @@
     }
     
     // Show the settings modal.
-    function showSettingsModal() {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      
-      const card = document.createElement('div');
-      card.className = 'settings-card';
-      
-      const title = document.createElement('h2');
-      title.textContent = 'Settings';
-      card.appendChild(title);
-      
-      // TTS toggle row using switch.
-      const ttsRow = document.createElement('div');
-      ttsRow.className = 'settings-row';
-      const ttsLabel = document.createElement('label');
-      ttsLabel.textContent = 'Enable TTS';
-      const switchLabel = document.createElement('label');
-      switchLabel.className = 'switch';
-      const ttsToggle = document.createElement('input');
-      ttsToggle.type = 'checkbox';
-      ttsToggle.checked = ttsEnabled;
-      ttsToggle.addEventListener('change', () => { ttsEnabled = ttsToggle.checked; });
-      const slider = document.createElement('span');
-      slider.className = 'slider';
-      switchLabel.appendChild(ttsToggle);
-      switchLabel.appendChild(slider);
-      ttsRow.appendChild(ttsLabel);
-      ttsRow.appendChild(switchLabel);
-      card.appendChild(ttsRow);
-      
-      // Voice Volume row.
-      const volumeRow = document.createElement('div');
-      volumeRow.className = 'settings-row';
-      const volumeLabel = document.createElement('label');
-      volumeLabel.textContent = 'Voice Volume';
-      const volumeSlider = document.createElement('input');
-      volumeSlider.type = 'range';
-      volumeSlider.min = 0;
-      volumeSlider.max = 1;
-      volumeSlider.step = 0.1;
-      volumeSlider.value = ttsVolume;
-      volumeSlider.className = 'volume-slider';
-      volumeSlider.addEventListener('input', () => {
-        ttsVolume = parseFloat(volumeSlider.value);
-      });
-      volumeRow.appendChild(volumeLabel);
-      volumeRow.appendChild(volumeSlider);
-      card.appendChild(volumeRow);
-      
-      // Voice selection row.
-      const voiceRow = document.createElement('div');
-      voiceRow.className = 'settings-row';
-      const voiceLabel = document.createElement('label');
-      voiceLabel.textContent = 'Bot Voice';
-      const voiceSelect = document.createElement('select');
-      voiceSelect.id = 'voiceSelect';
-      voiceSelect.addEventListener('change', () => {
-        selectedVoice = filteredVoices[voiceSelect.selectedIndex];
-      });
-      voiceRow.appendChild(voiceLabel);
-      voiceRow.appendChild(voiceSelect);
-      card.appendChild(voiceRow);
-      
-      // Close button.
-      const closeBtn = document.createElement('button');
-      closeBtn.textContent = 'Save & Close';
-      closeBtn.addEventListener('click', () => { overlay.remove(); });
-      card.appendChild(closeBtn);
-      
-      overlay.appendChild(card);
-      document.body.appendChild(overlay);
-      
-      populateVoiceList();
-    }
+function showSettingsModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  
+  const card = document.createElement('div');
+  card.className = 'settings-card';
+  
+  const title = document.createElement('h2');
+  title.textContent = 'Settings';
+  card.appendChild(title);
+  
+  // TTS toggle row using switch.
+  const ttsRow = document.createElement('div');
+  ttsRow.className = 'settings-row';
+  const ttsLabel = document.createElement('label');
+  ttsLabel.textContent = 'Enable TTS';
+  const switchLabel = document.createElement('label');
+  switchLabel.className = 'switch';
+  const ttsToggle = document.createElement('input');
+  ttsToggle.type = 'checkbox';
+  ttsToggle.checked = ttsEnabled;
+  ttsToggle.addEventListener('change', () => { ttsEnabled = ttsToggle.checked; });
+  const slider = document.createElement('span');
+  slider.className = 'slider';
+  switchLabel.appendChild(ttsToggle);
+  switchLabel.appendChild(slider);
+  ttsRow.appendChild(ttsLabel);
+  ttsRow.appendChild(switchLabel);
+  card.appendChild(ttsRow);
+  
+  // Voice Volume row with percentage display.
+  const volumeRow = document.createElement('div');
+  volumeRow.className = 'settings-row';
+  const volumeLabel = document.createElement('label');
+  volumeLabel.textContent = 'Voice Volume';
+  
+  const volumeSlider = document.createElement('input');
+  volumeSlider.type = 'range';
+  volumeSlider.min = 0;
+  volumeSlider.max = 1;
+  volumeSlider.step = 0.1;
+  volumeSlider.value = ttsVolume;
+  volumeSlider.className = 'volume-slider';
+  
+  // Create a span to display the percentage value.
+  const volumePercentage = document.createElement('span');
+  volumePercentage.className = 'volume-percentage';
+  volumePercentage.textContent = Math.round(ttsVolume * 100) + '%';
+  
+  // Update volume and percentage display on slider input.
+  volumeSlider.addEventListener('input', () => {
+    ttsVolume = parseFloat(volumeSlider.value);
+    volumePercentage.textContent = Math.round(ttsVolume * 100) + '%';
+  });
+  
+  volumeRow.appendChild(volumeLabel);
+  volumeRow.appendChild(volumeSlider);
+  volumeRow.appendChild(volumePercentage);
+  card.appendChild(volumeRow);
+  
+  // Voice selection row.
+  const voiceRow = document.createElement('div');
+  voiceRow.className = 'settings-row';
+  const voiceLabel = document.createElement('label');
+  voiceLabel.textContent = 'Bot Voice';
+  const voiceSelect = document.createElement('select');
+  voiceSelect.id = 'voiceSelect';
+  voiceSelect.addEventListener('change', () => {
+    selectedVoice = filteredVoices[voiceSelect.selectedIndex];
+  });
+  voiceRow.appendChild(voiceLabel);
+  voiceRow.appendChild(voiceSelect);
+  card.appendChild(voiceRow);
+  
+  // Close button.
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = 'Save & Close';
+  closeBtn.addEventListener('click', () => { overlay.remove(); });
+  card.appendChild(closeBtn);
+  
+  overlay.appendChild(card);
+  document.body.appendChild(overlay);
+  
+  populateVoiceList();
+}
     
     // Toggle the Options Card.
     function toggleOptionsCard() {
