@@ -4,7 +4,7 @@ This is J.B.A.I. I'll update this whenever I have time, but just to be clear—t
 
 Go try it out lol, it's so bad: 🔽
 
-➡️ **[J.B.A.I](https://gokuthug1.github.io/J.B.A.I)**
+➡️ **[J.B.A.I](https://gokuthug1.github.io/jbai)**
 
 ---
 
