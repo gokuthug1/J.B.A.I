@@ -17,11 +17,9 @@
           transform: scale(0.9);
       }
     }
-
     .fade-out {
       animation: fadeOut 0.4s ease forwards;
     }
-
     /* Base Styles */
     body {
         margin: 0;
@@ -34,7 +32,6 @@
         height: 100vh;
         width: 100vw;
     }
-
     /* Chat Container spans full viewport */
     .chat-container {
         display: flex;
@@ -47,7 +44,6 @@
         overflow: hidden;
         position: relative;
     }
-
     /* Message Area spans full width */
     .message-area {
         flex: 1;
@@ -61,26 +57,21 @@
         width: 100%;
         box-sizing: border-box;
     }
-
     .message-area::-webkit-scrollbar {
         display: none;
     }
-
     /* Message Styles */
     .message {
         display: flex;
         align-items: flex-start;
         box-sizing: border-box;
     }
-
     .message.user {
         justify-content: flex-end;
     }
-
     .message.bot {
         justify-content: flex-start;
     }
-
     .message-content {
         padding: 10px;
         border-radius: 15px;
@@ -90,12 +81,10 @@
         white-space: pre-wrap;
         box-sizing: border-box;
     }
-
     .message.user .message-content {
         background-color: #f4f4f4;
         align-self: flex-end;
     }
-
     .message.bot .message-content code {
         background-color: black;
         color: white;
@@ -103,7 +92,6 @@
         border-radius: 5px;
         display: block;
     }
-
     /* Chat Input Area */
     .chat-input-container {
         display: flex;
@@ -117,7 +105,6 @@
         width: 100%;
         box-sizing: border-box;
     }
-
     textarea {
         width: calc(100% - 60px);
         border: none;
@@ -130,7 +117,6 @@
         font-size: 14px;
         background-color: #f0f0f0;
     }
-
     /* Button Styles */
     button {
         display: flex;
@@ -145,23 +131,19 @@
         cursor: pointer;
         transition: background-color 0.3s;
     }
-
     button:hover {
         background-color: #555;
     }
-
     /* SVG Icon Sizing for Buttons */
     svg {
         width: 24px;
         height: 24px;
         fill: currentColor;
     }
-
     /* Link Preview Styles */
     .link-preview {
         margin-top: 8px;
     }
-
     .preview-container {
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -172,11 +154,9 @@
         color: inherit;
         transition: background-color 0.3s;
     }
-
     .preview-container:hover {
         background-color: #f9f9f9;
     }
-
     .preview-container img {
         width: 60px;
         height: 60px;
@@ -184,21 +164,37 @@
         border-radius: 4px;
         margin-right: 8px;
     }
-
     .preview-title {
         font-weight: bold;
     }
-
     .preview-description {
         font-size: 0.9em;
         color: #555;
     }
-
     .preview-url {
         font-size: 0.8em;
         color: #888;
     }
-
+    /* Delete Confirmation Card Styles */
+    .delete-confirmation-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        display: flex;
+        gap: 10px;
+        z-index: 100;
+    }
+    .delete-confirmation-card button {
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
     /* Responsive Styles */
     @media (max-width: 500px) {
         .message-content {
@@ -234,10 +230,44 @@
     </div>
   </div>
   <script>
-    // Helper function to delete a message with fade-out animation
+    // Helper function to delete a message with fade-out animation.
     function deleteMessage(messageEl) {
       messageEl.classList.add('fade-out');
       setTimeout(() => messageEl.remove(), 400);
+    }
+
+    // Shows a confirmation card with "Delete" and "Cancel" options.
+    function showConfirmation(messageEl) {
+      // Avoid duplicate confirmation cards.
+      if (messageEl.querySelector('.delete-confirmation-card')) return;
+      const card = document.createElement('div');
+      card.className = 'delete-confirmation-card';
+
+      // Create Delete button.
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.style.backgroundColor = 'red';
+      deleteBtn.style.color = 'white';
+
+      // Create Cancel button.
+      const cancelBtn = document.createElement('button');
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.style.backgroundColor = 'black';
+      cancelBtn.style.color = 'white';
+
+      card.appendChild(deleteBtn);
+      card.appendChild(cancelBtn);
+
+      // Ensure the message is positioned relatively so the card can be positioned absolutely.
+      messageEl.style.position = 'relative';
+      messageEl.appendChild(card);
+
+      deleteBtn.addEventListener('click', () => {
+          deleteMessage(messageEl);
+      });
+      cancelBtn.addEventListener('click', () => {
+          card.remove();
+      });
     }
 
     // Attach event listeners for deletion on PC (shift-click) and mobile (long press)
@@ -248,11 +278,11 @@
           deleteMessage(messageEl);
         }
       });
-      // Mobile: Delete on long press (800ms threshold)
+      // Mobile: Show confirmation card on long press (800ms threshold)
       let pressTimer;
       messageEl.addEventListener('touchstart', (e) => {
         pressTimer = setTimeout(() => {
-          deleteMessage(messageEl);
+          showConfirmation(messageEl);
         }, 800);
       });
       messageEl.addEventListener('touchend', (e) => {
@@ -263,7 +293,7 @@
       });
     }
 
-    // Helper functions for link previews (unchanged)
+    // Helper functions for link previews.
     function updatePreviewWithFavicon(previewElement, pageUrl) {
       fetch(pageUrl)
         .then(response => response.text())
@@ -372,7 +402,7 @@
       }
     }
 
-    // Display a message and check for link previews if plain text
+    // Display a message and check for link previews if plain text.
     function displayMessage(content, sender, isHTML = false) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
@@ -391,7 +421,7 @@
       return messageEl;
     }
 
-    // Typewriter effect for bot messages
+    // Typewriter effect for bot messages.
     function displayMessageWithTyping(content, sender) {
       const messageEl = document.createElement('div');
       messageEl.className = `message ${sender}`;
@@ -422,7 +452,7 @@
       typeLetter();
     }
 
-    // AI Chatbot Logic
+    // AI Chatbot Logic.
     function generateResponse(message) {
       const keywords = {
           greetings: /\b(hello|hi|hey|greetings|wsp|wsg|howdy|what's up|yo|good day|hiya)\b/i,
