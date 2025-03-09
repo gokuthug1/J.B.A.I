@@ -103,7 +103,7 @@ textarea {
 
 /* Toggle Options Button (now a plus symbol) placed to the left */
 #toggle-options-button {
-  background-color: #fff;
+  background-color: #000;
   /* Removed outer ring */
   border: none;
   border-radius: 50%;
