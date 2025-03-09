@@ -478,7 +478,7 @@ function showSettingsModal() {
               "I don't have hobbies like humans do, but assisting you is a lot of fun!"
           ],
           name: [
-              "I'm J.B.A.I | An AI chatbot!",
+              "I'm J.B.A.I. An AI chatbot!",
               "You can refer to me as J.B.A.I. How can I help you today?",
               "I'm your helpful assistant, J.B.A.I. What can I do for you?",
               "Just call me J.B.A.I. I'm here to help!",
