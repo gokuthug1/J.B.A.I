@@ -6,6 +6,6 @@ Go try it out lol it's so bad: 🔽
 # https://gokuthug1.github.io/gpt
 
 # Some Features
-I added a feature to delete messages by clciking Shift+Click (Mouse Click)
+I added a feature to delete messages by clicking Shift+Click (Mouse Click)
 
 There are no other features as of now but I will add them in the future.
