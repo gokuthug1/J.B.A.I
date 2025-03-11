@@ -8,9 +8,18 @@ let filteredVoices = [];
 // New global variables for music feature.
 let awaitingMusicRequest = false;
 let musicList = [
-  { name: "All 2 u", url: "https://audio.jukehost.co.uk/og7I6eTNzGvVdRpBsgUAtgZU6v1bLSJt" },
+  { name: "All 2 U", url: "https://audio.jukehost.co.uk/og7I6eTNzGvVdRpBsgUAtgZU6v1bLSJt" },
   { name: "Break My Mind", url: "https://audio.jukehost.co.uk/XoOtqY3rHGZC7jgmSh6kmLppZRL43MJQ" },
-  { name: "Burning In Hell", url: "https://audio.jukehost.co.uk/A7INWvBav2ia2WUOjGnFNm98nq5FmE2Z" }
+  { name: "Burning In Hell", url: "https://audio.jukehost.co.uk/A7INWvBav2ia2WUOjGnFNm98nq5FmE2Z" },
+  { name: "Animal", url: "https://audio.jukehost.co.uk/Ot2BZDZegGH86sMLp8EKxg340lgmct5Z" },
+  { name: "Below the Surface", url: "https://audio.jukehost.co.uk/sBcQs8BkC2rR5FEGUGfRDALlO83VJlQA" },
+  { name: "Devil's Gambit", url: "https://audio.jukehost.co.uk/orNvIq4gjY7THupqc9gfAbIwqKJI6Nqw" },
+  { name: "Class Fight", url: "https://audio.jukehost.co.uk/zTb63m0UquXkO6jftlbR4a9BTiWVlfml" },
+  { name: "Disruption", url: "https://audio.jukehost.co.uk/8XR5ulNdkkplbdsYVJDSI4GNMpQnFGP5" },
+  { name: "Genocide", url: "https://audio.jukehost.co.uk/b9M5F2nZPE7q4bJXVOXuAspE40R1qEvX" },
+  { name: "Bloodshed", url: "https://audio.jukehost.co.uk/hfm6sZitk3798iMlizdfOqpQO5jFSZ8j" },
+  { name: "Drawn to the Bitter", url: "https://audio.jukehost.co.uk/VsVWpw74dT7dB6IwspEMGbBslICNgyOa" },
+  { name: "Just Gold", url: "https://audio.jukehost.co.uk/L3D5OmmR4DbWOyTGS54MMgql2AAK6vl5" }
 ];
 let currentSongIndex = 0;
 let audioPlayer = new Audio();
