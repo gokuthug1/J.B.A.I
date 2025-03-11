@@ -14,7 +14,7 @@ J.B.A.I is an experimental chatbot inspired by ChatGPT. **Note:** This isn’t a
 - **Mobile:** **Tap and hold** a message to see a confirmation prompt.
 
 ### 🔹 Music
-J.B.A.I now supports music requests! Just ask for a song or some music, and J.B.A.I will prompt you to choose one. For now, the library is small (about 12 songs featuring my favorites), but I plan to expand it to include more popular tracks over time.
+J.B.A.I now supports music requests! Just ask for a song or some music, and J.B.A.I will prompt you to choose one. For now, the library is small 14 so far (and counting), but I plan to expand it to include more popular tracks over time.
 
 ### 🔹 Settings
 Customize your chatbot experience with the new settings options:
