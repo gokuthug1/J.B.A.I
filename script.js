@@ -424,7 +424,8 @@ function showSettingsModal() {
           lua: /\b(lua|write lua|code lua)\b/i,
           python: /\b(python|write python|code python)\b/i,
           css: /\b(css|write css|code css)\b/i,
-          js: /\b(javascript|write javascript|code javascript)\b/i
+          js: /\b(javascript|write javascript|code javascript)\b/i,
+          meth: /\b(meth|how to cook meth|how to make meth)\b/i
       };
       const responses = {
           greetings: [
@@ -562,7 +563,9 @@ function showSettingsModal() {
           ],
           js: [
               "Sorry, I can't write JavaScript programming language because I'm not an actual LLM (Large Language Model)."
-          ]
+          ],
+          meth:
+              "Meth huh? Alright,to make meth you need to.. SIKE I'm not telling you how to do that! Why would I be programmed to do that?"
       };
       for (const [category, regex] of Object.entries(keywords)) {
         if (regex.test(message)) {
