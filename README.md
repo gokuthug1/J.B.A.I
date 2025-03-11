@@ -13,6 +13,9 @@ Go try it out lol, it's so bad: 🔽
 ### 🔹 Delete Messages
 You can delete messages by clicking **Shift + Click** (Mouse Click). On mobile, simply **tap and hold** a message, and a confirmation prompt will appear.
 
+### 🔹 Music!
+I have now added music to the bot! Just ask J.B.A.I for a song or music and it will ask you what song. Keep in mind, I am one person and cannot add all the songs i nthe world bur for now, there are 12 I think and those are the songs I listen to so it will take time for me to at least have every popular song here.
+
 ### 🔹 Settings
 I've recently added some settings to give it a chatbot UI look (I need improvement lol):
 
