@@ -3,7 +3,9 @@
   from { opacity: 1; transform: scale(1); }
   to { opacity: 0; transform: scale(0.9); }
 }
-.fade-out { animation: fadeOut 0.4s ease forwards; }
+.fade-out { 
+  animation: fadeOut 0.4s ease forwards; 
+}
 
 /* Base Styles */
 body {
@@ -44,7 +46,9 @@ body {
   width: 100%;
   box-sizing: border-box;
 }
-.message-area::-webkit-scrollbar { display: none; }
+.message-area::-webkit-scrollbar { 
+  display: none; 
+}
 
 /* Message Styles */
 .message {
@@ -52,8 +56,12 @@ body {
   align-items: flex-start;
   box-sizing: border-box;
 }
-.message.user { justify-content: flex-end; }
-.message.bot { justify-content: flex-start; }
+.message.user { 
+  justify-content: flex-end; 
+}
+.message.bot { 
+  justify-content: flex-start; 
+}
 .message-content {
   padding: 10px;
   border-radius: 15px;
@@ -113,7 +121,9 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-#toggle-options-button:hover { background-color: #555; } /* Same hover effect as send button */
+#toggle-options-button:hover { 
+  background-color: #555; 
+}
 #toggle-options-button svg {
   width: 20px;
   height: 20px;
@@ -132,8 +142,14 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-#send-button svg { width: 24px; height: 24px; fill: #fff; }
-#send-button:hover { background-color: #555; }
+#send-button svg { 
+  width: 24px; 
+  height: 24px; 
+  fill: #fff; 
+}
+#send-button:hover { 
+  background-color: #555; 
+}
 
 /* Options Card (appears when toggle button is clicked) */
 .options-card {
@@ -192,14 +208,21 @@ textarea {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-.settings-card h2 { margin-top: 0; font-size: 20px; color: #333; }
+.settings-card h2 { 
+  margin-top: 0; 
+  font-size: 20px; 
+  color: #333; 
+}
 .settings-row {
   margin: 15px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.settings-row label { font-size: 16px; color: #333; }
+.settings-row label { 
+  font-size: 16px; 
+  color: #333; 
+}
 .settings-card select {
   max-width: 150px;
   padding: 4px;
@@ -224,7 +247,11 @@ textarea {
   width: 50px;
   height: 24px;
 }
-.switch input { opacity: 0; width: 0; height: 0; }
+.switch input { 
+  opacity: 0; 
+  width: 0; 
+  height: 0; 
+}
 .slider {
   position: absolute;
   cursor: pointer;
@@ -244,19 +271,99 @@ textarea {
   transition: 0.4s;
   border-radius: 50%;
 }
-input:checked + .slider { background-color: #000; }
-input:checked + .slider:before { transform: translateX(26px); }
+input:checked + .slider { 
+  background-color: #000; 
+}
+input:checked + .slider:before { 
+  transform: translateX(26px); 
+}
 
 /* Additional: Voice Volume Slider */
 .volume-slider {
   width: 100px;
 }
 
+/* Link Preview Styles */
+/* Link Preview Container */
+.link-preview {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  background-color: #fafafa;
+  transition: transform 0.2s ease;
+}
+.link-preview:hover {
+  transform: scale(1.02);
+}
+
+/* Preview Container */
+.preview-container {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+/* Preview Image */
+.preview-container img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-right: 1px solid #ddd;
+}
+
+/* Preview Text Container */
+.preview-text {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Preview Title */
+.preview-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+/* Preview Description */
+.preview-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+/* Preview URL */
+.preview-url {
+  font-size: 12px;
+  color: #999;
+  word-break: break-all;
+}
+
 /* Responsive Styles */
 @media (max-width: 500px) {
-  .message-content { font-size: 12px; }
-  textarea { font-size: 14px; }
-  button { width: 36px; height: 36px; }
-  #toggle-options-button, #send-button { width: 36px; height: 36px; }
-  #toggle-options-button svg, .options-card button svg { width: 18px; height: 18px; }
+  .message-content { 
+    font-size: 12px; 
+  }
+  textarea { 
+    font-size: 14px; 
+  }
+  button { 
+    width: 36px; 
+    height: 36px; 
+  }
+  #toggle-options-button, 
+  #send-button { 
+    width: 36px; 
+    height: 36px; 
+  }
+  #toggle-options-button svg, 
+  .options-card button svg { 
+    width: 18px; 
+    height: 18px; 
+  }
 }
