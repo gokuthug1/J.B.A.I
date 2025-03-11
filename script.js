@@ -457,7 +457,9 @@ function generateResponse(message) {
       python: /\b(python|write python|code python)\b/i,
       css: /\b(css|write css|code css)\b/i,
       js: /\b(javascript|write javascript|code javascript)\b/i,
-      meth: /\b(meth|how to cook meth|how to make meth)\b/i
+      meth: /\b(meth|how to cook meth|how to make meth)\b/i,
+      song: /\b(song|play a song)\b/i,
+      music: /\b(music|play music)\b/i
   };
   const responses = {
       greetings: [
