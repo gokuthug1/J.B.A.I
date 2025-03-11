@@ -1,9 +1,8 @@
 # J.B.A.I
 
-This is J.B.A.I. I'll update this whenever I have time, but just to be clear—this isn't a real LLM. I just made something similar to ChatGPT lol.
+J.B.A.I is an experimental chatbot inspired by ChatGPT. **Note:** This isn’t a full-fledged LLM—it's a fun project I built for experimentation. I update it whenever I can, so stay tuned for new features!
 
-Go try it out lol, it's so bad: 🔽
-
+**Try it out:** 🔽  
 ➡️ **[J.B.A.I](https://gokuthug1.github.io/jbai)**
 
 ---
@@ -11,25 +10,23 @@ Go try it out lol, it's so bad: 🔽
 ## Features
 
 ### 🔹 Delete Messages
-You can delete messages by clicking **Shift + Click** (Mouse Click). On mobile, simply **tap and hold** a message, and a confirmation prompt will appear.
+- **Desktop:** Delete messages by **Shift + Clicking** on them.
+- **Mobile:** **Tap and hold** a message to see a confirmation prompt.
 
-### 🔹 Music!
-I have now added music to the bot! Just ask J.B.A.I for a song or music and it will ask you what song. Keep in mind, I am one person and cannot add all the songs i nthe world bur for now, there are 12 I think and those are the songs I listen to so it will take time for me to at least have every popular song here.
+### 🔹 Music
+J.B.A.I now supports music requests! Just ask for a song or some music, and J.B.A.I will prompt you to choose one. For now, the library is small (about 12 songs featuring my favorites), but I plan to expand it to include more popular tracks over time.
 
 ### 🔹 Settings
-I've recently added some settings to give it a chatbot UI look (I need improvement lol):
+Customize your chatbot experience with the new settings options:
 
-#### 1. 🗣️ TTS (Text-to-Speech)
-- The TTS feature can be toggled **on/off** in the settings.
-- When enabled, you can hear J.B.A.I instead of reading responses.
+#### 🗣️ TTS (Text-to-Speech)
+- Toggle the TTS feature **on/off** to have J.B.A.I read out responses.
 
-#### 2. 🎙️ Change J.B.A.I's Voice
-- In the settings, there is an option labeled **"Bot Voice"**.
-- You can change J.B.A.I’s voice using the dropdown menu next to it.
+#### 🎙️ Change J.B.A.I's Voice
+- Select a different voice for J.B.A.I using the **"Bot Voice"** dropdown menu in the settings.
 
-#### 3. 🔊 Adjust J.B.A.I's Volume
-- In settings, find the **"Voice Volume"** option.
-- This lets you adjust the TTS volume to control how loud J.B.A.I sounds.
+#### 🔊 Adjust J.B.A.I's Volume
+- Control the loudness of J.B.A.I's TTS with the **"Voice Volume"** slider in settings.
 
 ---
 
