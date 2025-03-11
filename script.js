@@ -159,13 +159,12 @@ function showSettingsModal() {
         
         // File Upload Button.
         const fileUploadBtn = document.createElement('button');
-        fileUploadBtn.title = 'Upload File';
-        fileUploadBtn.innerHTML = `
-          <svg viewBox="0 0 24 24">
-            <path d="M12 16l4-5h-3V4h-2v7H8l4 5z"/>
-            <path d="M4 18h16v2H4z"/>
-          </svg>
-        `;
+    fileUploadBtn.title = 'Upload File';
+    fileUploadBtn.innerHTML = `
+      <svg viewBox="0 0 24 24">
+        <path d="M5 20h14v-2H5v2zM9 8l3-3 3 3h-2v6h-2V8H9z" fill="currentColor"/>
+      </svg>
+    `;
         fileUploadBtn.addEventListener('click', () => {
           document.getElementById('file-upload').click();
           closeOptionsCard();
@@ -382,7 +381,7 @@ function showSettingsModal() {
     
       // Start TTS 1 second after typing starts.
       if (sender === 'bot' && ttsEnabled) {
-         setTimeout(() => { speakTTS(content); }, 1000);
+         setTimeout(() => { speakTTS(content); }, 400);
       }
     
       let typedMessage = '';
