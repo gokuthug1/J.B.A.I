@@ -249,26 +249,51 @@ function showSettingsModal() {
     }
     
     // Helper functions for link previews.
-    function updatePreviewWithFavicon(previewElement, pageUrl) {
-      fetch(pageUrl)
-        .then(response => response.text())
-        .then(htmlText => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(htmlText, 'text/html');
-          let iconLink = doc.querySelector('link[rel="icon"]') || doc.querySelector('link[rel="shortcut icon"]');
-          if (iconLink) {
-            let faviconUrl = iconLink.getAttribute('href');
-            if (faviconUrl) {
-              try { faviconUrl = new URL(faviconUrl, pageUrl).href; }
-              catch (e) { console.error("Error resolving favicon URL:", e); }
-              const imgEl = previewElement.querySelector('img');
-              if (imgEl) { imgEl.src = faviconUrl; }
-            }
-          }
-        })
-        .catch(err => console.error('Error fetching favicon:', err));
+    async function updatePreviewWithFavicon(previewElement, pageUrl) {
+  try {
+    const response = await fetch(pageUrl);
+    if (!response.ok) throw new Error(`Network error: ${response.status}`);
+    const htmlText = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlText, 'text/html');
+
+    // Try various selectors for favicon links:
+    // 'rel*="icon"' will match any rel value that contains "icon"
+    // Also checking for common Apple touch icons.
+    let iconLink = doc.querySelector('link[rel*="icon"]') ||
+                   doc.querySelector('link[rel="apple-touch-icon"]') ||
+                   doc.querySelector('link[rel="apple-touch-icon-precomposed"]');
+
+    let faviconUrl = null;
+    if (iconLink && iconLink.getAttribute('href')) {
+      faviconUrl = iconLink.getAttribute('href');
+      try {
+        // Resolve relative URLs against the page URL.
+        faviconUrl = new URL(faviconUrl, pageUrl).href;
+      } catch (e) {
+        console.error("Error resolving favicon URL:", e);
+      }
     }
-    
+
+    // Fallback: use /favicon.ico if no icon was found.
+    if (!faviconUrl) {
+      try {
+        const urlObj = new URL(pageUrl);
+        faviconUrl = `${urlObj.origin}/favicon.ico`;
+      } catch (e) {
+        console.error("Error constructing fallback favicon URL:", e);
+      }
+    }
+
+    // Update the preview image if available.
+    const imgEl = previewElement.querySelector('img');
+    if (imgEl && faviconUrl) { 
+      imgEl.src = faviconUrl;
+    }
+  } catch (error) {
+    console.error("Error fetching or parsing favicon:", error);
+  }
+}
     function buildGenericPreview(url) {
       try {
         const urlObj = new URL(url);
