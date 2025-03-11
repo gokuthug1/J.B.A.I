@@ -8,7 +8,9 @@ let filteredVoices = [];
 // New global variables for music feature.
 let awaitingMusicRequest = false;
 let musicList = [
-  { name: "All 2 u", url: "https://audio.jukehost.co.uk/og7I6eTNzGvVdRpBsgUAtgZU6v1bLSJt" }
+  { name: "All 2 u", url: "https://audio.jukehost.co.uk/og7I6eTNzGvVdRpBsgUAtgZU6v1bLSJt" },
+  { name: "Break My Mind", url: "https://audio.jukehost.co.uk/XoOtqY3rHGZC7jgmSh6kmLppZRL43MJQ" },
+  { name: "Burining In Hell". url: "https://audio.jukehost.co.uk/A7INWvBav2ia2WUOjGnFNm98nq5FmE2Z" }
 ];
 let currentSongIndex = 0;
 let audioPlayer = new Audio();
