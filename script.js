@@ -564,8 +564,9 @@ function showSettingsModal() {
           js: [
               "Sorry, I can't write JavaScript programming language because I'm not an actual LLM (Large Language Model)."
           ],
-          meth:
-              "Meth huh? Alright,to make meth you need to.. SIKE I'm not telling you how to do that! Why would I be programmed to do that?"
+          meth: [
+              "Meth huh? Alright, to make meth you need to.. SIKE I'm not telling you how to do that! Why would I be programmed to do that?"
+              ]
       };
       for (const [category, regex] of Object.entries(keywords)) {
         if (regex.test(message)) {
