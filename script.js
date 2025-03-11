@@ -20,7 +20,8 @@ let musicList = [
   { name: "Bloodshed", url: "https://audio.jukehost.co.uk/hfm6sZitk3798iMlizdfOqpQO5jFSZ8j" },
   { name: "Drawn to the Bitter", url: "https://audio.jukehost.co.uk/VsVWpw74dT7dB6IwspEMGbBslICNgyOa" },
   { name: "Just Gold", url: "https://audio.jukehost.co.uk/L3D5OmmR4DbWOyTGS54MMgql2AAK6vl5" },
-  { name: "Join us for a bite", url: "https://audio.jukehost.co.uk/zMMQkpi7Gq1vQU97Fyo5CQGbwfyFo15C" }
+  { name: "Join us for a bite", url: "https://audio.jukehost.co.uk/zMMQkpi7Gq1vQU97Fyo5CQGbwfyFo15C" },
+  { name: "Just Look My Way", url: "https://audio.jukehost.co.uk/8kkSkAooHjpQAYQU24b4HUNwG1XxbTBd" }
 ];
 let currentSongIndex = 0;
 let audioPlayer = new Audio();
