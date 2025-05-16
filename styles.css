@@ -12,7 +12,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f3f4f6; /* Light grey background from original */
+  background-color: #f3f4f6; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +28,7 @@ body {
   height: 100vh;
   width: 100vw; 
   max-width: 100%;
-  background-color: rgba(255,255,255,0.7); /* Original semi-transparent white */
+  background-color: rgba(255,255,255,0.7); 
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   overflow: hidden; 
@@ -40,8 +40,8 @@ body {
   flex: 1; 
   padding: 10px;
   overflow-y: auto; 
-  background-color: #fff; /* White message area background */
-  border-bottom: 1px solid #ddd; /* Light grey border */
+  background-color: #fff; 
+  border-bottom: 1px solid #ddd; 
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -52,7 +52,7 @@ body {
   width: 0;
   background: transparent;
 }
-.message-area { /* For Firefox */
+.message-area { 
   scrollbar-width: none;
 }
 
@@ -71,7 +71,7 @@ body {
 }
 .message-content {
   padding: 10px 15px; 
-  border-radius: 15px; /* Original border-radius */
+  border-radius: 15px; 
   max-width: 80%; 
   word-wrap: break-word; 
   white-space: pre-wrap; 
@@ -79,18 +79,18 @@ body {
   line-height: 1.4; 
 }
 .message.user .message-content {
-  background-color: #f4f4f4; /* Original light grey for user messages */
-  color: #333; /* Default dark text */
+  background-color: #f4f4f4; 
+  color: #333; 
   align-self: flex-end;
 }
 .message.bot .message-content {
-  background-color: #e0e0e0; /* Original grey for bot messages */
-  color: #333; /* Default dark text */
+  background-color: #e0e0e0; 
+  color: #333; 
 }
 
 .message.bot .message-content code { 
-  background-color: #000; /* Original black background for code */
-  color: #fff; /* Original white text for code */
+  background-color: #000; 
+  color: #fff; 
   padding: 10px;
   border-radius: 5px;
   display: block;
@@ -106,32 +106,40 @@ body {
 .chat-input-container {
   display: flex;
   align-items: center;    
-  padding: 0 10px;        
+  padding: 10px; /* Restored original padding, adjust if 60px height is strict */       
   gap: 10px;
-  border-top: 1px solid #ddd; /* Original light grey border */
-  background-color: #fff; /* Original white background */
+  border-top: 1px solid #ddd; 
+  background-color: #fff; 
   position: sticky;       
   bottom: 0;
-  width: 791px;           /* Fixed width as requested */
-  height: 60px;           /* Fixed height as requested */
+  width: 100%;            /* MODIFIED: Changed from 791px to 100% to stretch */
+  height: 60px;           /* Fixed height as requested previously.
+                             With 10px top/bottom padding, content area is 40px.
+                             Buttons and textarea are 40px tall so they fit.
+                           */
   box-sizing: border-box; 
-  margin-left: auto;      
-  margin-right: auto;     
+  /* margin-left: auto; REMOVED */
+  /* margin-right: auto; REMOVED */
 }
 
 textarea#chat-input { 
   flex: 1; 
-  border: none; /* Original: no border */
-  border-radius: 12px; /* Original border-radius */
-  padding: 10px 15px; 
+  border: none; 
+  border-radius: 12px; 
+  padding: 10px; /* Textarea internal padding */
   resize: none; 
   outline: none; 
-  min-height: 40px; 
-  max-height: 40px; 
-  height: 40px; 
-  overflow-y: auto; 
-  font-size: 14px; /* Original font size from earlier user CSS */
-  line-height: 1.4; 
+  /*
+    Container height is 60px. Container padding is 10px top/bottom.
+    Effective space for textarea and buttons = 60px - 20px = 40px.
+    Textarea has padding 10px top/bottom, so its internal content area for text
+    will be 40px - 20px = 20px high before scrolling.
+    This makes the textarea itself 40px tall.
+  */
+  height: 40px; /* Total height of the textarea element */
+  overflow-y: auto; /* Allow scrolling within textarea if text exceeds 20px content height */
+  font-size: 14px; 
+  line-height: 1.4; /* Approx 20px for one line, fits in content area */
   box-sizing: border-box; 
 }
 textarea#chat-input::placeholder {
@@ -141,11 +149,11 @@ textarea#chat-input::placeholder {
 /* Toggle Options Button & Send Button Common Styles */
 #toggle-options-button,
 #send-button {
-  background-color: #000; /* Original black background */
+  background-color: #000; 
   border: none;
   border-radius: 50%; 
-  width: 40px;  /* Original width */
-  height: 40px; /* Original height */
+  width: 40px;  
+  height: 40px; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,36 +163,38 @@ textarea#chat-input::placeholder {
 }
 #toggle-options-button:hover,
 #send-button:hover { 
-  background-color: #555; /* Original darker grey on hover */
+  background-color: #555; 
 }
 #toggle-options-button:active,
 #send-button:active {
   transform: scale(0.95); 
 }
 
-#toggle-options-button svg { /* For the plus icon */
+#toggle-options-button svg { 
   width: 20px; 
   height: 20px; 
-  /* stroke="#fff" is set in the HTML SVG for this one */
 }
-#send-button svg { /* For the send icon */
+#send-button svg { 
   width: 24px; 
   height: 24px; 
-  fill: #fff; /* Original white fill for send icon */
+  fill: #fff; 
 }
 
 
 /* Options Card */
 .options-card {
   position: absolute;
-  bottom: 70px; 
+  /*
+    chat-input-container height is 60px.
+    If options card appears above it, bottom should be at least 60px + some gap.
+  */
+  bottom: 70px; /* e.g., 60px (input height) + 10px (gap) */
   left: 10px;   
-  background-color: #fff; /* Original white background */
-  border: 1px solid #000; /* Original black border */
+  background-color: #fff; 
+  border: 1px solid #000; 
   border-radius: 6px; 
   padding: 8px;
   display: flex;
-  /* flex-direction: column; */ /* Reverted to row display as per original implied layout */
   gap: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
   opacity: 0;
@@ -199,9 +209,9 @@ textarea#chat-input::placeholder {
   visibility: visible;
 }
 .options-card button {
-  background: none; /* Original: no background */
-  border: none; /* Original: no border */
-  color: #000; /* Text/Icon color for options */
+  background: none; 
+  border: none; 
+  color: #000; 
   cursor: pointer;
   padding: 4px; 
   display: flex; 
@@ -211,12 +221,12 @@ textarea#chat-input::placeholder {
   transition: opacity 0.2s ease;
 }
 .options-card button:hover {
-  opacity: 0.7; /* Slight fade on hover for icon buttons */
+  opacity: 0.7; 
 }
 .options-card button svg {
   width: 20px; 
   height: 20px; 
-  fill: #000; /* Original black fill for icons in options card */
+  fill: #000; 
   flex-shrink: 0;
 }
 
@@ -224,7 +234,7 @@ textarea#chat-input::placeholder {
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0,0,0,0.5); /* Original semi-transparent black */
+  background-color: rgba(0,0,0,0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -239,11 +249,11 @@ textarea#chat-input::placeholder {
   transition: opacity 0.3s ease, visibility 0s 0s;
 }
 .settings-card {
-  background-color: #fff; /* Original white */
+  background-color: #fff; 
   border-radius: 12px;
   padding: 20px; 
   width: 80%; 
-  max-width: 320px; /* Original max-width */
+  max-width: 320px; 
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   text-align: left;
   animation: slideInModal 0.3s ease-out forwards;
@@ -256,7 +266,7 @@ textarea#chat-input::placeholder {
 }
 
 @keyframes slideInModal { 
-  from { transform: translateY(20px) scale(0.95); opacity: 0; } /* translateY was 20px */
+  from { transform: translateY(20px) scale(0.95); opacity: 0; } 
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 .settings-card h2 { 
@@ -264,7 +274,6 @@ textarea#chat-input::placeholder {
   margin-bottom: 20px; 
   font-size: 20px; 
   color: #333; 
-  /* text-align: center; */ /* Original was left aligned */
 }
 .settings-row {
   margin-bottom: 15px; 
@@ -273,8 +282,8 @@ textarea#chat-input::placeholder {
   justify-content: space-between;
   gap: 10px; 
 }
-.settings-row:last-child {
-    margin-bottom: 0; 
+.settings-row:last-of-type { /* Better selector for last row before button */
+    margin-bottom: 20px; /* Add more space before the save button */
 }
 .settings-row label { 
   font-size: 16px; 
@@ -283,33 +292,32 @@ textarea#chat-input::placeholder {
 }
 .settings-card select,
 .settings-card .volume-slider { 
-  padding: 4px; /* Original padding */
+  padding: 4px; 
   font-size: 14px;
   border: 1px solid #ccc; 
   border-radius: 4px; 
   box-sizing: border-box;
 }
 .settings-card select {
-  max-width: 150px; /* Original max-width for select */
+  max-width: 150px; 
   background-color: white; 
 }
-.settings-card button { /* Generic button style within settings card */
+.settings-card button { 
   width: 100%;
   padding: 10px; 
   margin-top: 10px; 
   border: none;
   border-radius: 6px; 
-  background-color: #000; /* Original black background for settings buttons */
-  color: #fff; /* Original white text */
+  background-color: #000; 
+  color: #fff; 
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 .settings-card button:hover {
-  background-color: #333; /* Darker grey on hover */
+  background-color: #333; 
 }
-/* For specific buttons if needed, like the red delete button from original example */
-.settings-card button.delete-style { /* Example if you have a red delete button */
+.settings-card button.delete-style { 
     background-color: #e74c3c;
 }
 .settings-card button.delete-style:hover {
@@ -334,7 +342,7 @@ textarea#chat-input::placeholder {
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc; /* Original grey for 'off' state */
+  background-color: #ccc; 
   transition: .4s;
   border-radius: 24px; 
 }
@@ -351,28 +359,28 @@ textarea#chat-input::placeholder {
   box-shadow: 0 1px 3px rgba(0,0,0,0.2); 
 }
 input:checked + .slider { 
-  background-color: #000; /* Original black for 'on' state */
+  background-color: #000; 
 }
 input:checked + .slider:before { 
-  transform: translateX(26px); /* Original movement */
+  transform: translateX(26px); 
 }
 
 /* Voice Volume Slider specific styling */
 .volume-slider {
   -webkit-appearance: none; 
   appearance: none;
-  width: 100px; /* Original width from user CSS */
+  width: 100px; 
   height: 8px; 
-  background: #ddd; /* Neutral track color */
+  background: #ddd; 
   outline: none;
   opacity: 0.9;
   transition: opacity .2s;
   border-radius: 4px;
-  padding: 0; /* Reset padding for range input */
+  padding: 0; 
 }
-.settings-card .volume-slider { /* Ensure specificity if needed */
-    width: 100px; /* As per original user's CSS */
-    flex-grow: 0; /* Don't let it grow if other elements are present */
+.settings-card .volume-slider { 
+    width: 100px; 
+    flex-grow: 0; 
     flex-shrink: 0;
 }
 
@@ -384,7 +392,7 @@ input:checked + .slider:before {
   appearance: none;
   width: 16px; 
   height: 16px; 
-  background: #555; /* Dark grey thumb */
+  background: #555; 
   cursor: pointer;
   border-radius: 50%;
   border: 2px solid white; 
@@ -393,7 +401,7 @@ input:checked + .slider:before {
 .volume-slider::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: #555; /* Dark grey thumb */
+  background: #555; 
   cursor: pointer;
   border-radius: 50%;
   border: 2px solid white;
@@ -410,25 +418,34 @@ input:checked + .slider:before {
 
 
 /* Responsive Styles */
-@media (max-width: 791px) { /* For the chat input container specifically */
+/* The media query for 791px is no longer needed if width is 100% by default */
+/*
+@media (max-width: 791px) {
   .chat-input-container {
     width: 100%; 
     margin-left: 0;
     margin-right: 0;
   }
 }
+*/
 
-@media (max-width: 600px) { /* General smaller screen adjustments from my previous reasonable attempt */
-  .message-content { 
-    font-size: 14px; /* Reverted from 15px to align with earlier state */
-    max-width: 85%; 
+@media (max-width: 600px) { 
+  /* Chat input container height might need adjustment if textarea/buttons change */
+  .chat-input-container {
+    height: auto; /* Allow height to adjust to content on small screens */
+    min-height: 60px; /* Maintain a minimum height */
+    padding: 8px; /* Slightly reduce padding */
   }
   textarea#chat-input { 
     font-size: 14px; 
-    padding: 8px 12px; 
-    min-height: 38px; 
-    height: 38px; 
-    max-height: 38px;
+    padding: 8px 10px; /* Adjust padding */
+    /* Adjust height based on line-height and desired visible lines */
+    height: 38px; /* Example: for approx 1-2 lines visible before scroll */
+    min-height: 38px;
+  }
+  .message-content { 
+    font-size: 14px; 
+    max-width: 85%; 
   }
   #toggle-options-button, 
   #send-button { 
@@ -444,10 +461,16 @@ input:checked + .slider:before {
     height: 20px;
   }
   .options-card {
-    bottom: 60px; 
-    left: 5px;
-    right: 5px; 
-    width: auto; 
+    /* Adjust bottom based on actual chat-input-container height on mobile */
+    bottom: auto; /* Let's try this: if input container height is auto */
+    top: auto; /* Ensure it's not constrained by top if bottom is auto */
+    transform: translateY(-100%) translateY(-10px); /* Position above */
+    left: 8px;
+    right: 8px;
+    width: calc(100% - 16px); /* Full width minus padding */
+  }
+  .options-card.show {
+      transform: translateY(-100%) translateY(-10px); /* Keep consistent animation if needed */
   }
   .options-card button svg { 
     width: 18px; 
@@ -462,21 +485,22 @@ input:checked + .slider:before {
   }
   .settings-row {
     flex-direction: column; 
-    align-items: flex-start; 
+    align-items: stretch; /* Make controls take full width in column */
     gap: 8px; 
   }
   .settings-row label {
     flex-basis: auto; 
     margin-bottom: 5px; 
+    text-align: left; /* Ensure label text is aligned left */
   }
   .settings-card select,
   .settings-card .volume-slider,
   .volume-percentage {
     font-size: 14px; 
-    width: 100% !important; /* !important to ensure it overrides for volume slider */
+    width: 100% !important; 
   }
    .settings-card .volume-slider {
-       max-width: 100%; /* Allow slider to take full width in column layout */
+       max-width: 100%; 
    }
   .volume-percentage {
       text-align: left; 
