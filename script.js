@@ -26,6 +26,20 @@ let musicList = [
 let currentSongIndex = 0;
 let audioPlayer = new Audio();
 
+// Utility function to escape HTML to prevent XSS.
+function escapeHTML(text) {
+  if (typeof text !== 'string') {
+    // Attempt to convert to string, or return empty if not possible (e.g. null/undefined)
+    text = String(text || ''); 
+  }
+  return text
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
+    .replace(/'/g, ''');
+}
+
 // Function to speak text using the Web Speech API.
 function speakTTS(text) {
   if (window.speechSynthesis && ttsEnabled && text.trim() !== '') {
@@ -268,135 +282,13 @@ function addDeleteListener(messageEl) {
   messageEl.addEventListener('touchend', () => { clearTimeout(pressTimer); });
   messageEl.addEventListener('touchmove', () => { clearTimeout(pressTimer); });
 }
+
+// Link preview functions are removed.
+// async function updatePreviewWithFavicon(previewElement, pageUrl) { ... }
+// function buildGenericPreview(url) { ... }
+// function checkForLinkPreview(contentEl, message) { ... }
     
-// Helper functions for link previews.
-async function updatePreviewWithFavicon(previewElement, pageUrl) {
-  try {
-    const response = await fetch(pageUrl);
-    if (!response.ok) throw new Error(`Network error: ${response.status}`);
-    const htmlText = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlText, 'text/html');
-
-    // Try various selectors for favicon links:
-    // 'rel*="icon"' will match any rel value that contains "icon"
-    // Also checking for common Apple touch icons.
-    let iconLink = doc.querySelector('link[rel*="icon"]') ||
-                   doc.querySelector('link[rel="apple-touch-icon"]') ||
-                   doc.querySelector('link[rel="apple-touch-icon-precomposed"]');
-
-    let faviconUrl = null;
-    if (iconLink && iconLink.getAttribute('href')) {
-      faviconUrl = iconLink.getAttribute('href');
-      try {
-        // Resolve relative URLs against the page URL.
-        faviconUrl = new URL(faviconUrl, pageUrl).href;
-      } catch (e) {
-        console.error("Error resolving favicon URL:", e);
-      }
-    }
-
-    // Fallback: use /favicon.ico if no icon was found.
-    if (!faviconUrl) {
-      try {
-        const urlObj = new URL(pageUrl);
-        faviconUrl = `${urlObj.origin}/favicon.ico`;
-      } catch (e) {
-        console.error("Error constructing fallback favicon URL:", e);
-      }
-    }
-
-    // Update the preview image if available.
-    const imgEl = previewElement.querySelector('img');
-    if (imgEl && faviconUrl) { 
-      imgEl.src = faviconUrl;
-    }
-  } catch (error) {
-    console.error("Error fetching or parsing favicon:", error);
-  }
-}
-function buildGenericPreview(url) {
-  try {
-    const urlObj = new URL(url);
-    const domain = urlObj.hostname;
-    const placeholder = 'data:image/svg+xml;base64,' + btoa(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24">
-        <path fill="#ccc" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-        <path fill="#ccc" d="M0 0h24v24H0z" fill="none"/>
-      </svg>
-    `);
-    const previewContainer = document.createElement('a');
-    previewContainer.className = 'preview-container';
-    previewContainer.href = url;
-    previewContainer.target = '_blank';
-
-    const img = document.createElement('img');
-    img.src = placeholder;
-    img.alt = 'Preview Image';
-    previewContainer.appendChild(img);
-
-    const textDiv = document.createElement('div');
-    textDiv.className = 'preview-text';
-
-    const titleDiv = document.createElement('div');
-    titleDiv.className = 'preview-title';
-    titleDiv.textContent = domain;
-    textDiv.appendChild(titleDiv);
-
-    const descDiv = document.createElement('div');
-    descDiv.className = 'preview-description';
-    descDiv.textContent = `Link preview for ${url}`;
-    textDiv.appendChild(descDiv);
-
-    const urlDiv = document.createElement('div');
-    urlDiv.className = 'preview-url';
-    urlDiv.textContent = url;
-    textDiv.appendChild(urlDiv);
-
-    previewContainer.appendChild(textDiv);
-
-    updatePreviewWithFavicon(previewContainer, url);
-
-    return previewContainer;
-  } catch(e) {
-    const fallbackContainer = document.createElement('a');
-    fallbackContainer.className = 'preview-container';
-    fallbackContainer.href = url;
-    fallbackContainer.target = '_blank';
-
-    const textDiv = document.createElement('div');
-    textDiv.className = 'preview-text';
-
-    const titleDiv = document.createElement('div');
-    titleDiv.className = 'preview-title';
-    titleDiv.textContent = url;
-    textDiv.appendChild(titleDiv);
-
-    const descDiv = document.createElement('div');
-    descDiv.className = 'preview-description';
-    descDiv.textContent = 'Link preview not available.';
-    textDiv.appendChild(descDiv);
-
-    fallbackContainer.appendChild(textDiv);
-    return fallbackContainer;
-  }
-}
-    
-function checkForLinkPreview(contentEl, message) {
-  const urlRegex = /((https?:\/\/)?[\w.-]+\.[a-z]{2,}(\/\S*)?)/gi;
-  const urls = message.match(urlRegex);
-  if (urls && urls.length > 0) {
-    let url = urls[0];
-    if (!url.startsWith('http')) { url = 'http://' + url; }
-    const previewElement = buildGenericPreview(url);
-    const previewWrapper = document.createElement('div');
-    previewWrapper.className = 'link-preview';
-    previewWrapper.appendChild(previewElement);
-    contentEl.parentNode.appendChild(previewWrapper);
-  }
-}
-    
-// Display a message and check for link previews.
+// Display a message.
 function displayMessage(content, sender, isHTML = false) {
   const messageEl = document.createElement('div');
   messageEl.className = `message ${sender}`;
@@ -404,12 +296,20 @@ function displayMessage(content, sender, isHTML = false) {
 
   const contentEl = document.createElement('div');
   contentEl.className = 'message-content';
-  contentEl[isHTML ? "innerHTML" : "textContent"] = content;
+  
+  // If isHTML is true, the content is assumed to be safe HTML (e.g., from file upload preview where content is escaped).
+  // If isHTML is false, textContent is used, which automatically escapes any HTML characters in the content.
+  if (isHTML) {
+    contentEl.innerHTML = content;
+  } else {
+    contentEl.textContent = content;
+  }
+  
   messageEl.appendChild(contentEl);
   document.getElementById('message-area').appendChild(messageEl);
   document.getElementById('message-area').scrollTop = document.getElementById('message-area').scrollHeight;
 
-  if (!isHTML) { checkForLinkPreview(contentEl, content); }
+  // Call to checkForLinkPreview removed from here.
   return messageEl;
 }
     
@@ -437,7 +337,8 @@ function displayMessageWithTyping(content, sender) {
   function typeLetter() {
     if (charIndex < content.length) {
       typedMessage += content.charAt(charIndex);
-      contentEl.textContent = typedMessage + ' ●';
+      // Using textContent ensures that the '●' and the message are treated as text and not HTML.
+      contentEl.textContent = typedMessage + ' ●'; 
       charIndex++;
       setTimeout(typeLetter, typingDelay);
     } else {
@@ -671,36 +572,37 @@ function sendMessage() {
   const chatInput = document.getElementById('chat-input');
   const userMessage = chatInput.value.trim();
   if (userMessage) {
-    displayMessage(userMessage, 'user');
+    // Display user message using textContent (default for displayMessage)
+    displayMessage(userMessage, 'user'); 
     chatInput.value = '';
     chatInput.focus();
     
-    // Check for music control commands if music is playing.
     const musicControlCommands = ["next", "previous", "pause", "stop", "play"];
     if (musicControlCommands.includes(userMessage.toLowerCase().trim()) && !awaitingMusicRequest) {
       handleMusicControl(userMessage.toLowerCase().trim());
       return;
     }
     
-    // If awaiting a music request, process the song name.
     if (awaitingMusicRequest) {
       handleMusicRequest(userMessage);
       return;
     }
     
-    // If the user message mentions "song" or "music", prompt for the song selection.
     if (/\b(song|music)\b/i.test(userMessage)) {
       awaitingMusicRequest = true;
       displayMessageWithTyping("Ok, what music would you like to listen to?", 'bot');
       return;
     }
     
-    // Normal chatbot response.
-    const typingIndicator = displayMessage("●", 'bot');
+    // Normal chatbot response
+    // Display a temporary typing indicator.
+    // Since displayMessage uses textContent by default, "●" is safe.
+    const typingIndicator = displayMessage("●", 'bot'); 
     setTimeout(() => {
       typingIndicator.remove();
       const aiResponse = generateResponse(userMessage.toLowerCase());
-      displayMessageWithTyping(aiResponse, 'bot');
+      // displayMessageWithTyping uses textContent, so aiResponse is safely displayed.
+      displayMessageWithTyping(aiResponse, 'bot'); 
     }, 1300);
   }
 }
@@ -709,78 +611,85 @@ function sendMessage() {
 function handleFileUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
+  
   const reader = new FileReader();
+  
   reader.onload = function() {
-    const fileContent = reader.result;
+    const fileContent = reader.result; // Content of the file (text for text files)
     let embedHTML = '';
-    function escapeHTML(text) {
-      return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+
+    // The global escapeHTML function is used here.
     if (file.type === 'text/html') {
       embedHTML = `<div>
-          <h3>HTML File Content:</h3>
+          <h3>HTML File Content: ${escapeHTML(file.name)}</h3>
           <pre>${escapeHTML(fileContent)}</pre>
         </div>`;
     } else if (file.type === 'application/javascript' || file.type === 'text/javascript') {
       embedHTML = `<div>
-          <h3>JavaScript File Content:</h3>
+          <h3>JavaScript File Content: ${escapeHTML(file.name)}</h3>
           <pre>${escapeHTML(fileContent)}</pre>
         </div>`;
     } else if (file.type === 'text/css') {
       embedHTML = `<div>
-          <h3>CSS File Content:</h3>
+          <h3>CSS File Content: ${escapeHTML(file.name)}</h3>
           <pre>${escapeHTML(fileContent)}</pre>
         </div>`;
     } else if (file.type === 'text/lua') {
       embedHTML = `<div>
-          <h3>Lua File Content:</h3>
+          <h3>Lua File Content: ${escapeHTML(file.name)}</h3>
           <pre>${escapeHTML(fileContent)}</pre>
         </div>`;
     } else if (file.type === 'text/plain' || file.name.endsWith('.bat')) {
       embedHTML = `<div>
-          <h3>${file.name.endsWith('.bat') ? 'Batch Script' : 'Text File'} Content:</h3>
+          <h3>${file.name.endsWith('.bat') ? 'Batch Script' : 'Text File'} Content: ${escapeHTML(file.name)}</h3>
           <pre>${escapeHTML(fileContent)}</pre>
         </div>`;
     } else if (file.type.startsWith('image/')) {
       const blobURL = URL.createObjectURL(file);
       embedHTML = `<div>
-          <h3>Uploaded Image: ${file.name}</h3>
-          <img src="${blobURL}" alt="Uploaded Image" style="max-width: 100%; height: auto; border-radius: 12px;">
+          <h3>Uploaded Image: ${escapeHTML(file.name)}</h3>
+          <img src="${blobURL}" alt="${escapeHTML('Uploaded Image: ' + file.name)}" style="max-width: 100%; height: auto; border-radius: 12px;">
         </div>`;
-    } else if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
+    } else if (file.type === 'audio/mpeg' || file.type === 'audio/mp3' || file.type.startsWith('audio/')) {
       const blobURL = URL.createObjectURL(file);
       embedHTML = `<div>
-          <h3>Uploaded Audio: ${file.name}</h3>
+          <h3>Uploaded Audio: ${escapeHTML(file.name)}</h3>
           <audio controls>
-            <source src="${blobURL}" type="${file.type}">
+            <source src="${blobURL}" type="${escapeHTML(file.type)}">
             Your browser does not support the audio element.
           </audio>
         </div>`;
-    } else if (file.type === 'video/mp4') {
+    } else if (file.type === 'video/mp4' || file.type.startsWith('video/')) {
       const blobURL = URL.createObjectURL(file);
       embedHTML = `<div>
-          <h3>Uploaded Video: ${file.name}</h3>
+          <h3>Uploaded Video: ${escapeHTML(file.name)}</h3>
           <video controls style="max-width: 100%; height: auto; border-radius: 12px;">
-            <source src="${blobURL}" type="${file.type}">
+            <source src="${blobURL}" type="${escapeHTML(file.type)}">
             Your browser does not support the video tag.
           </video>
         </div>`;
     } else {
+      // For unsupported file types, attempt to show text content if available (read by readAsText)
       embedHTML = `<div>
-          <h3>Unsupported File Type:</h3>
-          <p>File type: ${file.type}</p>
+          <h3>Unsupported File Type: ${escapeHTML(file.name)}</h3>
+          <p>File type: ${escapeHTML(file.type)}</p>
           <pre>${escapeHTML(fileContent)}</pre>
         </div>`;
     }
-    displayMessage(embedHTML, 'bot', true);
+    // Display the constructed HTML string, isHTML = true indicates it's pre-formatted HTML.
+    displayMessage(embedHTML, 'bot', true); 
   };
-  reader.onerror = function() { displayMessage("Error reading file.", 'bot'); };
-  reader.readAsText(file);
+  
+  reader.onerror = function() {
+    // displayMessage uses textContent by default, so this is safe.
+    displayMessage("Error reading file.", 'bot'); 
+  };
+
+  // Read all files as text. For binary files, fileContent might be garbled
+  // but it's only used in the 'unsupported' <pre> tag.
+  // For supported binary types (image, audio, video), URL.createObjectURL(file) is used,
+  // which doesn't rely on reader.result for the primary display.
+  reader.readAsText(file); 
 }
     
 // Set up event listeners.
