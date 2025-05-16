@@ -37,7 +37,7 @@ function escapeHTML(text) {
     .replace(/</g, '<')
     .replace(/>/g, '>')
     .replace(/"/g, '"')
-    .replace(/'/g, ''');
+    .replace(/'/g, '&#39;')
 }
 
 // Function to speak text using the Web Speech API.
