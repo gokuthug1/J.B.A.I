@@ -68,19 +68,21 @@ body {
   background-color: #e0e0e0;
   max-width: 80%;
   word-wrap: break-word;
-  white-space: pre-wrap;
+  white-space: pre-wrap; /* Ensures that text wraps and sequences of spaces are preserved */
   box-sizing: border-box;
 }
 .message.user .message-content {
   background-color: #f4f4f4;
   align-self: flex-end;
 }
-.message.bot .message-content code {
+.message.bot .message-content code { /* Style for code blocks within bot messages */
   background-color: #000;
   color: #fff;
   padding: 10px;
   border-radius: 5px;
   display: block;
+  white-space: pre; /* Preserve whitespace strictly for code */
+  overflow-x: auto; /* Allow horizontal scrolling for long code lines */
 }
 
 /* Chat Input Area */
@@ -103,12 +105,16 @@ textarea {
   padding: 10px;
   resize: none;
   outline: none;
-  height: 40px;
-  overflow-y: hidden;
+  height: 40px; /* Initial height */
+  min-height: 40px; /* Minimum height */
+  max-height: 120px; /* Maximum height before scrolling */
+  overflow-y: auto; /* Changed from hidden to auto to allow scrolling if content exceeds max-height */
   font-size: 14px;
+  line-height: 1.4; /* Improves readability */
+  box-sizing: border-box;
 }
 
-/* Toggle Options Button (now a plus symbol) placed to the left */
+/* Toggle Options Button (plus symbol) placed to the left */
 #toggle-options-button {
   background-color: #000;
   border: none;
@@ -120,6 +126,7 @@ textarea {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 #toggle-options-button:hover { 
   background-color: #555; 
@@ -127,9 +134,10 @@ textarea {
 #toggle-options-button svg {
   width: 20px;
   height: 20px;
+  fill: #fff; /* Assuming the SVG for plus is white */
 }
 
-/* Send Button remains unchanged */
+/* Send Button */
 #send-button {
   background-color: #000;
   border: none;
@@ -141,6 +149,7 @@ textarea {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 #send-button svg { 
   width: 24px; 
@@ -154,10 +163,10 @@ textarea {
 /* Options Card (appears when toggle button is clicked) */
 .options-card {
   position: absolute;
-  bottom: 60px; /* above the input area */
+  bottom: 60px; /* Adjust based on chat-input-container height */
   left: 10px;
   background-color: #fff;
-  border: 1px solid #000;
+  border: 1px solid #000; /* Changed from #ddd to #000 for consistency */
   border-radius: 6px;
   padding: 8px;
   display: flex;
@@ -165,22 +174,27 @@ textarea {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.3s, transform 0.3s;
-  z-index: 150;
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Added ease timing function */
+  z-index: 150; /* Ensure it's above message area */
+  visibility: hidden; /* Start hidden, control with .show */
 }
 .options-card.show {
   opacity: 1;
   transform: translateY(0);
+  visibility: visible;
 }
 .options-card button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 4px; /* Reduced padding for a more compact look if needed */
+  display: flex; /* Helps align SVG if it has extra space */
+  align-items: center;
+  justify-content: center;
 }
 .options-card button svg {
-  width: 20px;
-  height: 20px;
+  width: 20px; /* Or 24px to match send button's icon size */
+  height: 20px; /* Or 24px */
   fill: #000;
 }
 
@@ -188,21 +202,28 @@ textarea {
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.5); /* Semi-transparent black */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000; /* High z-index to be on top */
+  opacity: 0; /* Start transparent */
+  visibility: hidden; /* Start hidden */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.show { /* Class to show the modal */
+  opacity: 1;
+  visibility: visible;
 }
 .settings-card {
   background-color: #fff;
   border-radius: 12px;
   padding: 20px;
-  width: 80%;
-  max-width: 320px;
+  width: 90%; /* More responsive for small screens */
+  max-width: 350px; /* Increased max-width slightly */
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   text-align: left;
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.3s ease-out forwards; /* Added forwards to keep end state */
 }
 @keyframes slideIn {
   from { transform: translateY(20px); opacity: 0; }
@@ -210,11 +231,12 @@ textarea {
 }
 .settings-card h2 { 
   margin-top: 0; 
+  margin-bottom: 20px; /* Added margin bottom */
   font-size: 20px; 
   color: #333; 
 }
 .settings-row {
-  margin: 15px 0;
+  margin-bottom: 15px; /* Use margin-bottom for consistent spacing */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -222,30 +244,44 @@ textarea {
 .settings-row label { 
   font-size: 16px; 
   color: #333; 
+  flex-shrink: 0; /* Prevent label from shrinking */
+  margin-right: 10px; /* Add some space between label and control */
+}
+.settings-card select,
+.settings-card .volume-slider { /* Grouping similar controls */
+  padding: 6px; /* Increased padding */
+  font-size: 14px;
+  border: 1px solid #ccc; /* Added border */
+  border-radius: 4px; /* Added border-radius */
+  box-sizing: border-box;
 }
 .settings-card select {
-  max-width: 150px;
-  padding: 4px;
-  font-size: 14px;
+  flex-grow: 1; /* Allow select to take available space */
+  max-width: 180px; /* Adjust as needed */
 }
-.settings-card button {
+.settings-card button { /* Style for the Save & Close button */
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
+  padding: 12px; /* Increased padding */
+  margin-top: 20px; /* Increased margin-top */
   border: none;
   border-radius: 6px;
   background-color: #000;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.settings-card button:hover {
+  background-color: #333;
 }
 
 /* Switch Toggle Styles */
 .switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 24px;
+  width: 50px; /* Width of the switch */
+  height: 24px; /* Height of the switch */
+  flex-shrink: 0; /* Prevent switch from shrinking */
 }
 .switch input { 
   opacity: 0; 
@@ -255,109 +291,82 @@ textarea {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 24px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc; /* Color when off */
+  transition: .4s;
+  border-radius: 24px; /* Rounded switch */
 }
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
+  height: 18px; /* Size of the toggle circle */
+  width: 18px;  /* Size of the toggle circle */
+  left: 3px;   /* Position from left when off */
+  bottom: 3px; /* Position from bottom */
   background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
+  transition: .4s;
+  border-radius: 50%; /* Circular toggle */
 }
 input:checked + .slider { 
-  background-color: #000; 
+  background-color: #000; /* Color when on */
 }
 input:checked + .slider:before { 
-  transform: translateX(26px); 
+  transform: translateX(26px); /* How far the circle moves */
 }
 
-/* Additional: Voice Volume Slider */
+/* Additional: Voice Volume Slider specific styling (if needed beyond .settings-card .volume-slider) */
 .volume-slider {
-  width: 100px;
+  width: 120px; /* Or use flex-grow if it's in a flex container */
+}
+.volume-percentage {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #555;
+  min-width: 35px; /* Ensure space for "100%" */
+  text-align: right;
 }
 
-/* Link Preview Styles - REMOVED */
-/*
-.link-preview {
-  margin-top: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  background-color: #fafafa;
-  transition: transform 0.2s ease;
-}
-.link-preview:hover {
-  transform: scale(1.02);
-}
-.preview-container {
-  display: flex;
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-}
-.preview-container img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-right: 1px solid #ddd;
-}
-.preview-text {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-}
-.preview-title {
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #333;
-}
-.preview-description {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-}
-.preview-url {
-  font-size: 12px;
-  color: #999;
-  word-break: break-all;
-}
-*/
 
 /* Responsive Styles */
 @media (max-width: 500px) {
   .message-content { 
-    font-size: 12px; 
+    font-size: 14px; /* Slightly larger for better readability on mobile */
+    max-width: 85%; /* Allow slightly wider messages */
   }
   textarea { 
     font-size: 14px; 
   }
-  /* General button width and height for smaller screens */
-  /* This rule was overly broad and affected settings card buttons etc.
-     It's better to target specific buttons if needed or adjust layout.
-     For now, I'm commenting it out as the toggle/send buttons have specific sizes.
-  button { 
-    width: 36px; 
-    height: 36px; 
-  }
-  */
+  /* Specific button adjustments for smaller screens */
   #toggle-options-button, 
   #send-button { 
     width: 36px; 
     height: 36px; 
   }
-  #toggle-options-button svg, 
-  .options-card button svg { 
+  #toggle-options-button svg { 
     width: 18px; 
     height: 18px; 
+  }
+  #send-button svg {
+    width: 20px; /* Adjusted to be slightly smaller */
+    height: 20px;
+  }
+  .options-card button svg { 
+    width: 18px; /* Consistent with toggle options button */
+    height: 18px; 
+  }
+  .settings-card {
+    padding: 15px; /* Reduce padding on small screens */
+  }
+  .settings-card h2 {
+    font-size: 18px; /* Smaller heading */
+  }
+  .settings-row label,
+  .settings-card select,
+  .settings-card .volume-slider,
+  .volume-percentage {
+    font-size: 14px; /* Smaller font for settings controls */
   }
 }
