@@ -18,6 +18,7 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  overflow: hidden; /* To prevent body scrollbars if chat container is full screen */
 }
 
 /* Chat Container */
@@ -25,263 +26,308 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  width: 100vw; /* Takes full viewport width */
+  max-width: 100%; /* Ensures it doesn't exceed viewport if a fixed width is also set elsewhere by mistake */
   background-color: rgba(255,255,255,0.7);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  overflow: hidden;
+  overflow: hidden; /* Message area will scroll, not the whole container */
   position: relative;
 }
 
 /* Message Area */
 .message-area {
-  flex: 1;
+  flex: 1; /* Takes up available vertical space */
   padding: 10px;
-  overflow-y: auto;
+  overflow-y: auto; /* Enables vertical scrolling for messages */
   background-color: #fff;
   border-bottom: 1px solid #ddd;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
+  /* width: 100%; Ensuring it spans the chat-container width */
   box-sizing: border-box;
 }
 .message-area::-webkit-scrollbar { 
-  display: none; 
+  display: none; /* Hides scrollbar for WebKit browsers */
+  width: 0;  /* For Chrome, Safari, and Opera */
+  background: transparent; /* For Firefox */
 }
+/* For Firefox */
+.message-area {
+  scrollbar-width: none;
+}
+
 
 /* Message Styles */
 .message {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-start; /* Aligns avatar/icon with top of message bubble */
   box-sizing: border-box;
+  max-width: 100%; /* Ensure messages don't overflow their container */
 }
 .message.user { 
-  justify-content: flex-end; 
+  justify-content: flex-end; /* Aligns user messages to the right */
 }
 .message.bot { 
-  justify-content: flex-start; 
+  justify-content: flex-start; /* Aligns bot messages to the left */
 }
 .message-content {
-  padding: 10px;
-  border-radius: 15px;
-  background-color: #e0e0e0;
-  max-width: 80%;
-  word-wrap: break-word;
-  white-space: pre-wrap; /* Ensures that text wraps and sequences of spaces are preserved */
+  padding: 10px 15px; /* More horizontal padding */
+  border-radius: 18px; /* Slightly more rounded */
+  background-color: #e0e0e0; /* Default for bot messages */
+  max-width: 80%; /* Max width of a message bubble */
+  word-wrap: break-word; /* Breaks long words to prevent overflow */
+  white-space: pre-wrap; /* Preserves whitespace and newlines, wraps text */
   box-sizing: border-box;
+  line-height: 1.4; /* Improved readability */
 }
 .message.user .message-content {
-  background-color: #f4f4f4;
+  background-color: #007bff; /* Example: Blue for user messages */
+  color: white;
   align-self: flex-end;
 }
+.message.bot .message-content {
+  background-color: #f0f0f0; /* Lighter grey for bot messages */
+  color: #333;
+}
+
 .message.bot .message-content code { /* Style for code blocks within bot messages */
-  background-color: #000;
-  color: #fff;
+  background-color: #282c34; /* Darker background for code */
+  color: #abb2bf; /* Light grey text for code */
   padding: 10px;
   border-radius: 5px;
   display: block;
   white-space: pre; /* Preserve whitespace strictly for code */
   overflow-x: auto; /* Allow horizontal scrolling for long code lines */
+  font-family: "Courier New", Courier, monospace; /* Monospaced font for code */
+  font-size: 0.9em; /* Slightly smaller font for code */
+  margin-top: 5px; /* Space if code block follows text */
+  margin-bottom: 5px; /* Space if code block precedes text */
 }
 
 /* Chat Input Area */
 .chat-input-container {
   display: flex;
-  align-items: center;
-  padding: 10px;
+  align-items: center;     /* Vertically aligns items in the center */
+  padding: 0 10px;         /* Padding: 0 for top/bottom, 10px for left/right */
   gap: 10px;
   border-top: 1px solid #ddd;
   background-color: #fff;
-  position: sticky;
+  position: sticky;        /* Sticks to the bottom of the chat-container */
   bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-textarea {
-  flex: 1;
-  border: none;
-  border-radius: 12px;
-  padding: 10px;
-  resize: none;
-  outline: none;
-  height: 40px; /* Initial height */
-  min-height: 40px; /* Minimum height */
-  max-height: 120px; /* Maximum height before scrolling */
-  overflow-y: auto; /* Changed from hidden to auto to allow scrolling if content exceeds max-height */
-  font-size: 14px;
-  line-height: 1.4; /* Improves readability */
-  box-sizing: border-box;
+  width: 791px;            /* Fixed width as requested */
+  height: 60px;            /* Fixed height as requested */
+  box-sizing: border-box;  /* Ensures padding and border are included in the width/height */
+  margin-left: auto;       /* Centers it horizontally if chat-container is wider */
+  margin-right: auto;      /* Centers it horizontally if chat-container is wider */
 }
 
-/* Toggle Options Button (plus symbol) placed to the left */
-#toggle-options-button {
-  background-color: #000;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  flex-shrink: 0; /* Prevent shrinking */
+textarea#chat-input { /* More specific selector for the textarea */
+  flex: 1; /* Takes available space in the flex container */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 20px; /* Rounded corners */
+  padding: 10px 15px; /* Comfortable padding */
+  resize: none; /* Disables manual resizing */
+  outline: none; /* Removes default browser outline on focus */
+  /* Height management:
+     The container is 60px. Padding on container is 0 top/bottom.
+     Textarea padding 10px top + 10px bottom = 20px.
+     So, line-heights should fit within 60px - 20px = 40px.
+  */
+  min-height: 40px; /* Effective min height for content area */
+  max-height: 40px; /* Effective max height for content area (for single line before scroll) */
+                      /* If you want it to expand, increase max-height up to 40px or make it scrollable */
+  height: 40px; /* Explicit height for the content box of textarea */
+  overflow-y: auto; /* Allows scrolling if content exceeds height */
+  font-size: 16px; /* Larger font size */
+  line-height: 1.4; /* Consistent line height */
+  box-sizing: border-box; /* Padding included in height/width */
 }
-#toggle-options-button:hover { 
-  background-color: #555; 
-}
-#toggle-options-button svg {
-  width: 20px;
-  height: 20px;
-  fill: #fff; /* Assuming the SVG for plus is white */
+textarea#chat-input::placeholder {
+  color: #999; /* Lighter placeholder text */
 }
 
-/* Send Button */
+/* Toggle Options Button & Send Button Common Styles */
+#toggle-options-button,
 #send-button {
-  background-color: #000;
+  background-color: #007bff; /* Consistent button color */
   border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  border-radius: 50%; /* Circular buttons */
+  width: 44px;  /* Slightly larger buttons */
+  height: 44px; /* Slightly larger buttons */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease, transform 0.1s ease;
   flex-shrink: 0; /* Prevent shrinking */
+  color: white; /* Icon color */
 }
-#send-button svg { 
-  width: 24px; 
-  height: 24px; 
-  fill: #fff; 
-}
+#toggle-options-button:hover,
 #send-button:hover { 
-  background-color: #555; 
+  background-color: #0056b3; /* Darker shade on hover */
 }
+#toggle-options-button:active,
+#send-button:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
+
+#toggle-options-button svg,
+#send-button svg {
+  width: 22px; /* Adjust icon size if needed */
+  height: 22px; /* Adjust icon size if needed */
+  fill: currentColor; /* Uses the button's text color for SVG fill */
+}
+
 
 /* Options Card (appears when toggle button is clicked) */
 .options-card {
   position: absolute;
-  bottom: 60px; /* Adjust based on chat-input-container height */
-  left: 10px;
+  bottom: 70px; /* Adjusted: chat-input-container height (60px) + gap (10px) */
+  left: 10px;   /* Position from the left edge of chat-input-container */
   background-color: #fff;
-  border: 1px solid #000; /* Changed from #ddd to #000 for consistency */
-  border-radius: 6px;
-  padding: 8px;
+  border: 1px solid #ccc; /* Softer border */
+  border-radius: 8px; /* More rounded */
+  padding: 10px;
   display: flex;
+  flex-direction: column; /* Stack buttons vertically */
   gap: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Softer shadow */
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease; /* Added ease timing function */
-  z-index: 150; /* Ensure it's above message area */
-  visibility: hidden; /* Start hidden, control with .show */
+  transform: translateY(10px) scale(0.95); /* Initial animation state */
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 150; 
+  visibility: hidden; 
 }
 .options-card.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   visibility: visible;
 }
 .options-card button {
-  background: none;
-  border: none;
+  background-color: #f8f9fa; /* Light background for buttons */
+  border: 1px solid #dee2e6; /* Light border */
+  color: #333;
   cursor: pointer;
-  padding: 4px; /* Reduced padding for a more compact look if needed */
-  display: flex; /* Helps align SVG if it has extra space */
+  padding: 8px 12px; /* More padding */
+  border-radius: 6px; /* Rounded corners for buttons */
+  display: flex; 
   align-items: center;
-  justify-content: center;
+  gap: 8px; /* Space between icon and text if any */
+  font-size: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  width: 100%; /* Make buttons take full width of card */
+  text-align: left; /* Align text to left */
+}
+.options-card button:hover {
+  background-color: #e9ecef; /* Slightly darker on hover */
+  border-color: #ced4da;
 }
 .options-card button svg {
-  width: 20px; /* Or 24px to match send button's icon size */
-  height: 20px; /* Or 24px */
-  fill: #000;
+  width: 20px; 
+  height: 20px; 
+  fill: #333; /* Icon color matches text */
+  flex-shrink: 0;
 }
 
 /* Modal Overlay & Settings Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0,0,0,0.5); /* Semi-transparent black */
+  background-color: rgba(0,0,0,0.6); /* Darker overlay */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* High z-index to be on top */
-  opacity: 0; /* Start transparent */
-  visibility: hidden; /* Start hidden */
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000; 
+  opacity: 0; 
+  visibility: hidden; 
+  transition: opacity 0.3s ease, visibility 0s 0.3s; /* Delay visibility transition */
 }
-.modal-overlay.show { /* Class to show the modal */
+.modal-overlay.show { 
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s 0s;
 }
 .settings-card {
   background-color: #fff;
   border-radius: 12px;
-  padding: 20px;
-  width: 90%; /* More responsive for small screens */
-  max-width: 350px; /* Increased max-width slightly */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  text-align: left;
-  animation: slideIn 0.3s ease-out forwards; /* Added forwards to keep end state */
+  padding: 25px; /* More padding */
+  width: 90%; 
+  max-width: 400px; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  animation: slideInModal 0.3s ease-out forwards;
+  transform: scale(0.95); /* Start slightly smaller for animation */
+  opacity: 0; /* Start transparent for animation */
 }
-@keyframes slideIn {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.modal-overlay.show .settings-card { /* Animation when modal is shown */
+    transform: scale(1);
+    opacity: 1;
+}
+
+@keyframes slideInModal { /* Renamed for clarity */
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 .settings-card h2 { 
   margin-top: 0; 
-  margin-bottom: 20px; /* Added margin bottom */
-  font-size: 20px; 
+  margin-bottom: 25px; 
+  font-size: 22px; /* Larger title */
   color: #333; 
+  text-align: center; /* Center title */
 }
 .settings-row {
-  margin-bottom: 15px; /* Use margin-bottom for consistent spacing */
+  margin-bottom: 20px; 
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 15px; /* Gap between label and control */
+}
+.settings-row:last-child {
+    margin-bottom: 0; /* No margin for the last row before button */
 }
 .settings-row label { 
   font-size: 16px; 
-  color: #333; 
-  flex-shrink: 0; /* Prevent label from shrinking */
-  margin-right: 10px; /* Add some space between label and control */
+  color: #555; /* Slightly lighter label color */
+  flex-basis: 40%; /* Give label a base width */
+  flex-shrink: 0;
 }
 .settings-card select,
-.settings-card .volume-slider { /* Grouping similar controls */
-  padding: 6px; /* Increased padding */
+.settings-card .volume-slider { 
+  padding: 8px 10px; 
   font-size: 14px;
-  border: 1px solid #ccc; /* Added border */
-  border-radius: 4px; /* Added border-radius */
+  border: 1px solid #ced4da; 
+  border-radius: 6px; 
   box-sizing: border-box;
+  flex-grow: 1; /* Allow control to take remaining space */
 }
 .settings-card select {
-  flex-grow: 1; /* Allow select to take available space */
-  max-width: 180px; /* Adjust as needed */
+  background-color: white; /* Ensure select background is white */
 }
-.settings-card button { /* Style for the Save & Close button */
+.settings-card button.save-settings-btn { /* Specific class for save button */
   width: 100%;
-  padding: 12px; /* Increased padding */
-  margin-top: 20px; /* Increased margin-top */
+  padding: 12px; 
+  margin-top: 30px; 
   border: none;
-  border-radius: 6px;
-  background-color: #000;
+  border-radius: 8px; /* More rounded */
+  background-color: #007bff; /* Consistent primary color */
   color: #fff;
   font-size: 16px;
+  font-weight: 500; /* Medium font weight */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
-.settings-card button:hover {
-  background-color: #333;
+.settings-card button.save-settings-btn:hover {
+  background-color: #0056b3;
 }
 
 /* Switch Toggle Styles */
 .switch {
   position: relative;
   display: inline-block;
-  width: 50px; /* Width of the switch */
-  height: 24px; /* Height of the switch */
-  flex-shrink: 0; /* Prevent switch from shrinking */
+  width: 50px; 
+  height: 26px; /* Slightly taller */
+  flex-shrink: 0; 
 }
 .switch input { 
   opacity: 0; 
@@ -291,82 +337,142 @@ textarea {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc; /* Color when off */
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc; 
   transition: .4s;
-  border-radius: 24px; /* Rounded switch */
+  border-radius: 26px; 
 }
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px; /* Size of the toggle circle */
-  width: 18px;  /* Size of the toggle circle */
-  left: 3px;   /* Position from left when off */
-  bottom: 3px; /* Position from bottom */
+  height: 20px; 
+  width: 20px;  
+  left: 3px;   
+  bottom: 3px; 
   background-color: white;
   transition: .4s;
-  border-radius: 50%; /* Circular toggle */
+  border-radius: 50%; 
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Subtle shadow for knob */
 }
 input:checked + .slider { 
-  background-color: #000; /* Color when on */
+  background-color: #28a745; /* Green for 'on' state */
 }
 input:checked + .slider:before { 
-  transform: translateX(26px); /* How far the circle moves */
+  transform: translateX(24px); /* Adjusted movement */
 }
 
-/* Additional: Voice Volume Slider specific styling (if needed beyond .settings-card .volume-slider) */
+/* Voice Volume Slider specific styling */
 .volume-slider {
-  width: 120px; /* Or use flex-grow if it's in a flex container */
+  -webkit-appearance: none; /* Override default appearance */
+  appearance: none;
+  width: 100%; /* Take full width in its flex item container */
+  height: 8px; /* Slider track height */
+  background: #e9ecef; /* Slider track color */
+  outline: none;
+  opacity: 0.9;
+  transition: opacity .2s;
+  border-radius: 4px;
 }
+.volume-slider:hover {
+  opacity: 1;
+}
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; /* Thumb width */
+  height: 18px; /* Thumb height */
+  background: #007bff; /* Thumb color */
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid white; /* White border around thumb */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.volume-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #007bff;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
 .volume-percentage {
   margin-left: 10px;
   font-size: 14px;
   color: #555;
-  min-width: 35px; /* Ensure space for "100%" */
+  min-width: 40px; /* Ensure space for "100%" */
   text-align: right;
+  font-weight: 500;
 }
 
 
 /* Responsive Styles */
-@media (max-width: 500px) {
+@media (max-width: 791px) { /* Adjust breakpoint if 791px is critical */
+  .chat-input-container {
+    width: 100%; /* Revert to 100% width on smaller screens */
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 600px) { /* General smaller screen adjustments */
   .message-content { 
-    font-size: 14px; /* Slightly larger for better readability on mobile */
-    max-width: 85%; /* Allow slightly wider messages */
+    font-size: 15px; 
+    max-width: 85%; 
   }
-  textarea { 
-    font-size: 14px; 
+  textarea#chat-input { 
+    font-size: 15px; 
+    padding: 8px 12px; /* Adjust padding for smaller height */
+    min-height: 38px; /* Adjust min height */
+    height: 38px; /* Adjust height */
+    max-height: 38px;
   }
-  /* Specific button adjustments for smaller screens */
   #toggle-options-button, 
   #send-button { 
-    width: 36px; 
-    height: 36px; 
+    width: 40px; 
+    height: 40px; 
   }
-  #toggle-options-button svg { 
+  #toggle-options-button svg, 
+  #send-button svg { 
+    width: 20px; 
+    height: 20px; 
+  }
+  .options-card {
+    bottom: 60px; /* Adjust if input container height changes */
+    left: 5px;
+    right: 5px; /* Allow card to span more width if needed */
+    width: auto; /* Let content define width, up to max-width of parent */
+  }
+  .options-card button svg { 
     width: 18px; 
     height: 18px; 
   }
-  #send-button svg {
-    width: 20px; /* Adjusted to be slightly smaller */
-    height: 20px;
-  }
-  .options-card button svg { 
-    width: 18px; /* Consistent with toggle options button */
-    height: 18px; 
-  }
   .settings-card {
-    padding: 15px; /* Reduce padding on small screens */
+    padding: 20px; 
+    max-width: 95%; /* Allow modal to use more screen width */
   }
   .settings-card h2 {
-    font-size: 18px; /* Smaller heading */
+    font-size: 20px; 
   }
-  .settings-row label,
+  .settings-row {
+    flex-direction: column; /* Stack label and control */
+    align-items: flex-start; /* Align items to start */
+    gap: 8px; /* Reduce gap */
+  }
+  .settings-row label {
+    flex-basis: auto; /* Reset flex-basis */
+    margin-bottom: 5px; /* Space below label */
+  }
   .settings-card select,
   .settings-card .volume-slider,
   .volume-percentage {
-    font-size: 14px; /* Smaller font for settings controls */
+    font-size: 14px; 
+    width: 100%; /* Make controls take full width */
+  }
+  .volume-percentage {
+      text-align: left; /* Align percentage to left */
+      margin-left: 0; /* Reset margin */
+      margin-top: 5px; /* Space above percentage */
   }
 }
